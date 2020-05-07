@@ -1,0 +1,10 @@
+class event{
+  
+  public event(){
+    
+  }
+  
+  public event getRepeat(){
+    return new event();
+  }
+}
