@@ -1,50 +1,36 @@
-#import RPi.GPIO as GPIO
+from rpi_rf import RFDevice
+
+
 class pump:
+
+
     def __init__(self,frequencys):
         self.status=False
         self.frequencys=frequencys
         self.lock=False
-        self.cach=False
- #       GPIO.setmode(GPIO.BCM)
-  #      GPIO.setup(self.location,GPIO.OUT)
-        
-        
+        self.cach=False 
+
 
 
     def On(self):
         if not self.lock:
             self.status=True
-  #          GPIO.setup(self.location,GPIO.OUT)
-  #          GPIO.output(self.location,GPIO.HIGH)
+            self.sendCode(self.frequencys[0])
         else:
             self.cach=True            
 
     def Off(self):     
         if not self.lock:
             self.status=False
-   #         GPIO.output(self.location,0)
+            self.sendCode(self.frequencys[1])
         else:
             self.cach=False
-            
-    def checkCach(self):
-        if self.cach:
-            self.On()
-        else:
-            self.Off()
 
-    def setLocation(self,n):
-        self.location=n
-    
-    def getLocation(self):
-        return self.location
-'''
-    def lock(self):
-        self.lock=1
-        pass
-
-    def unlock(self):
-        self.lock=0
-
-'''
+    def sendCode(self, code):
+        self.rfdevice = RFDevice(17) 
+        self.rfdevice.enable_tx()
+        self.rfdevice.tx_repeat = 7
+        self.rfdevice.tx_code(code,1,415,24)
+        self.rfdevice.cleanup()
 
     
