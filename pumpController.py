@@ -29,7 +29,6 @@ class pumpController:
         self.t.join()
         self.emailSystem=em
 
-        self.pumpsCach=False
 
         
 #public methods
@@ -46,24 +45,14 @@ class pumpController:
         self.updateGUI()
 
 
-    def pumpsOn(self):
-        self.pumps.lock=False
-        self.pumps.On()
-        self.pumps.lock=True
+    def pumpChangeUser(self, newStatus):
+        self.pumps.userAction(newStatus)
         self.updateGUI()
 
-    def pumpsOff(self):
-        self.pumps.lock=False
-        self.pumps.Off()
-        self.pumps.lock=True
-        self.updateGUI()
+
 
     def pumpsNorm(self):
-        self.pumps.lock=False
-        if self.pumpsCach:
-            self.pumps.On()
-        else:
-            self.pumps.Off()
+        self.pumps.normalize()
         self.updateGUI()
 # private methods
 
@@ -78,13 +67,11 @@ class pumpController:
     '''
 
     def run(self):
-        self.pumps.lock=False
+        self.pumps.normalize()
         self.opperationalStatus=True
         t.sleep(1)
         self.pumps.On()
-        self.pumpsCach=True
         while self.opperationalStatus:
-            self.updateGUI()
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
             if (self.sumpLevelSensor.getLevel() and not self.atoReserveSensor.getLevel()) or (not self.tankLevelSensor.getLevel()):
                 print("something is wrong")
@@ -102,6 +89,7 @@ class pumpController:
                 self.pumps.On()
                 self.pumpsCach=True
                 print("it is on")
+            self.updateGUI()
             t.sleep(1)
 
 
@@ -156,12 +144,12 @@ class pumpController:
         self.w .grid(row=8,columnspan=2,column=1)
 
         buttonWidth=13
-        mPOnB=Button(frame,text="Pumps On",bg=bgC,fg=fgC,width=buttonWidth,command=self.pumpsOn)
+        mPOnB=Button(frame,text="Pumps On",bg=bgC,fg=fgC,width=buttonWidth,command=lambda: self.pumpChangeUser(True))
         mPOnB.grid(row=9,column=0)
-        mPOffB=Button(frame,text="Pumps Off",bg=bgC,fg=fgC,width=buttonWidth,command=self.pumpsOff)
+        mPOffB=Button(frame,text="Pumps Off",bg=bgC,fg=fgC,width=buttonWidth,command=lambda: self.pumpChangeUser(False))
         mPOffB.grid(row=9,column=1,columnspan=2)
 
-        mPOnB=Button(frame,text="Pumps Normal",bg=bgC,fg=fgC,width=buttonWidth,command=self.pumpsNorm)
+        mPOnB=Button(frame,text="Pumps Normal",bg=bgC,fg=fgC,width=buttonWidth,command=lambda: self.pumpsNorm())
         mPOnB.grid(row=10,column=0)
 
 

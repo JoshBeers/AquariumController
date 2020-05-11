@@ -21,6 +21,7 @@ import atoSystem as ato
         ato sensor at gpio18
             when res is full returns true
         receiver at 27 big one is receiver
+                    check these so that the pumps are not active if disconnected
 
     
 
@@ -62,6 +63,7 @@ saveUtility=settingSaver.settingSaver("saves/saved.txt")
 def on_closing():
     saveUtility.saveItems(heating.getTankTempSetting(),"[]","[]","[]")
     pumps.Off()
+    ato.Off()
     #lights.Off()
     #heating.End()
     root.destroy()
