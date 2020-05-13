@@ -1,4 +1,4 @@
-#from rpi_rf import RFDevice
+from rpi_rf import RFDevice
 
 
 class pump:
@@ -46,12 +46,13 @@ class pump:
         self.lock = True
 
     def sendCode(self, code):
-        '''
         self.rfdevice = RFDevice(17) 
         self.rfdevice.enable_tx()
         self.rfdevice.tx_repeat = 7
         self.rfdevice.tx_code(code,1,415,24)
         self.rfdevice.cleanup()
-        '''
-
+        
+    
+p = pump([0,1])
+p.sendCode(1397077)
     
