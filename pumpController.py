@@ -5,12 +5,14 @@ from tkinter import *
 from threading import Thread
 
 class pumpController:
-    def __init__(self,root,GUIcolors,pSize,em,pumpFrequency=[17,18],tankWaterLevelSensor=2,sumpwaterLevelSensor=3,atoResSensor = 4):
+    def __init__(self,root,GUIcolors,pSize,em,logger,pumpFrequency=[17,18],tankWaterLevelSensor=2,sumpwaterLevelSensor=3,atoResSensor = 4):
         self.pumps=p.pump(pumpFrequency)
         self.opperationalStatus=False
         self.tankLevelSensor=s.floatSensor(tankWaterLevelSensor)  # sensor in tank
         self.sumpLevelSensor=s.floatSensor(sumpwaterLevelSensor) # sensor that tells if too little water in resivour\
         self.atoReserveSensor = s.floatSensor(atoResSensor)
+
+        self.logger = logger
 
 
         self.waterLevelTooLow=False
@@ -36,6 +38,7 @@ class pumpController:
     def On(self): 
         self.t=Thread(target=self.run)
         self.t.start()
+        self.log('system turned on')
         
 
     def Off(self):
@@ -43,18 +46,27 @@ class pumpController:
         self.pumps.lock=False
         self.pumps.Off()
         self.updateGUI()
+        self.log('system turned off')
 
 
     def pumpChangeUser(self, newStatus):
         self.pumps.userAction(newStatus)
         self.updateGUI()
+        self.log('user turned pumps to {}'.format(newStatus))
 
 
 
     def pumpsNorm(self):
         self.pumps.normalize()
         self.updateGUI()
+        self.log('user normalized pumps')
+
+
 # private methods
+
+    def log(self,mes= '',warning = ''):
+        self.logger.pump(self.opperationalStatus,self.pumps.status,self.tankLevelSensor.getLevel(),self.sumpLevelSensor.getLevel(),mes,warning)
+
 
 
     '''
@@ -87,6 +99,7 @@ class pumpController:
                     self.warning='tank water level is high'
                 self.emailSystem.sendMessage(self.warning)
                 self.hasWarning=True
+                self.log('',self.warning)
                 #if everything is ok it turns the pumps on
             else:
                 self.pumps.On()

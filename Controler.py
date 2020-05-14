@@ -7,6 +7,7 @@ import signal
 import emailSystem
 import settingSaver
 import atoSystem as ato
+import logger
 
 
 '''
@@ -55,12 +56,12 @@ sumpSensorLocation = 22
 atoSensorLocation = 2
 
 #objects
-
+logger = logger.Logger()
 emails=emailSystem.emailSystem()
-pumps=pumpController.pumpController(root,colors,panelSize,emails,pumps,tankSensorLocation,sumpSensorLocation,atoSensorLocation)  #ad DNC loactions
+pumps=pumpController.pumpController(root,colors,panelSize,emails,logger,pumps,tankSensorLocation,sumpSensorLocation,atoSensorLocation)  #ad DNC loactions
 #lights=tankLigthControler.lightControler(root,colors,panelSize)  #add locations
-heating=temperatureControl.temperatureControl(78,root,colors,panelSize,emails) #add locations
-ato = ato.atoSystem(root,colors,panelSize,emails,atoPump,sumpSensorLocation,atoSensorLocation) #add locations
+heating=temperatureControl.temperatureControl(78,root,colors,panelSize,emails,logger) #add locations
+ato = ato.atoSystem(root,colors,panelSize,emails,logger,atoPump,sumpSensorLocation,atoSensorLocation) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
 
 

@@ -8,7 +8,8 @@ import RPi.GPIO as gpio
 
 class atoSystem:
 
-    def __init__(self,root,GUIcolors,pSize,emailSystem,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
+    def __init__(self,root,GUIcolors,pSize,emailSystem,logger,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
+        self.logger = logger
 
         self.atoPump=p.pump(pumpFrequency)
         self.sumpwaterLevelSensor = s.floatSensor(sumpwaterLevelSensor)
@@ -37,6 +38,7 @@ class atoSystem:
     def on(self) :
         self.t=Thread(target=self.run)
         self.t.start()
+        self.log('system started')
     
 
     def Off(self):
@@ -44,15 +46,18 @@ class atoSystem:
         self.atoPump.lock=False
         self.atoPump.Off()
         self.updateGui()
+        self.log('system stopped')
 
 
     def atoPumpOnFromUser(self,newStatus):
         self.atoPump.userAction(newStatus)
         self.updateGui()
+        self.log('pump {} from user'.format(newStatus))
     
     def Noramlize(self):
         self.atoPump.normalize()
         self.updateGui()
+        self.log('pump normalized')
 
         
 
@@ -61,6 +66,10 @@ class atoSystem:
             if res is low water doesnt pump
             if tank is low water pumped
     '''
+
+    def log(message= '',warning=''):
+        self.logger.ato(self.opperationalStatus,self.sumpwaterLevelSensor.getLevel(),self.atoResSensor.getLevel(),message,warning)
+        
 
     def run(self):
         self.atoPump.lock=False
@@ -73,6 +82,7 @@ class atoSystem:
             #if sump level low and res has water
             if(self.sumpwaterLevelSensor.getLevel() == 0 and self.atoResSensor.getLevel() ==0):
                 self.atoPump.On()
+                self.log('pump turned on')
                 #print("Test1")
             #if res needs refilled
             elif self.atoResSensor.getLevel() == 1:
@@ -82,9 +92,11 @@ class atoSystem:
                 self.needsWater = True
                 self.atoPump.Off()
                 self.opperationalStatus = False
+                self.log('res too low','res to low')
             else:
                 #print("Test3")
                 self.atoPump.Off()
+                self.log('pump turned off')
             self.updateGui()
             t.sleep(sleepTime)
 

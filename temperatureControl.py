@@ -8,7 +8,7 @@ import errno
 
 class temperatureControl:
 
-    def __init__(self,tempSet,root,GUIcolors,pSize,em,heaterLoaction=22):
+    def __init__(self,tempSet,root,GUIcolors,pSize,em,logger,heaterLoaction=22):
         self.heater=h.heater(heaterLoaction)
         self.thermometer=te.thermometer()
         self.temperatureSetting=tempSet
@@ -17,6 +17,8 @@ class temperatureControl:
         self.warning='none'
         self.warned=False
         self.emails=em
+
+        self.logger= logger
 
         self.thread=Thread()
         self.thread.start()
@@ -41,28 +43,37 @@ class temperatureControl:
         self.heaterLock=False
         self.thread=Thread(target=self.main)
         self.thread.start()
+        self.log('system turned on')
 
     def End(self):
         self.opperationStatus=False
         self.heater.Off()
         self.thread.join()
         self.updateGUI()
+        self.log('system turned off')
+
 
     def heaterOff(self):
         self.heaterLock=False
         self.heater.Off()
         self.heaterLock=True
         self.updateGUI()
+        self.log('heater turned off by user')
+
         
     def heaterOn(self):
         self.heaterLock=False
         self.heater.On()
         self.heaterLock=True
         self.updateGUI()
+        self.log('heater turned on by user')
+
 
     def heaterNormal(self):
         self.heaterLock=False
         self.updateGUI()
+        self.log('heater turned normal by user')
+
 
     def getHeaterStatus(self):
         return self.heater.getStatus()
@@ -82,6 +93,10 @@ class temperatureControl:
         self.warned=False
        
 #private methods   
+
+    def log(message='',warning=''):
+        self.logger.temp(self.opperationStatus,self.getHeaterStatus(),self.temperatureSetting,self.thermometer.getTemperature(),message,warning)
+
     
     def main(self):
         lastMin=0
@@ -92,19 +107,22 @@ class temperatureControl:
             if(self.heaterLock==False):
                 if(temp<self.temperatureSetting):
                   self.heater.On()
+                  self.log("heater turned on")
                 else:
                    self.heater.Off()
+                    self.log('heater turned off')
             if (temp-5)>self.temperatureSetting and not self.warned:
                 self.warning='tank temperature is too low'
                 self.emails.sendMessage(self.warning)
+                self.log('problem',self.warning)
             elif (temp+5)<self.temperatureSetting and not self.warned:
                 self.warning='tank temperature is too high'
                 self.emails.sendMessage(self.warning)
+                self.log('problem',self.warning)
             if not t[4]==lastMin:
-                self.logInfo(temp)
+                self.log()
                 lastMin=t[4]
             self.updateGUI()
-            print(lastMin)
             time.sleep(1)
 
 #GUI 
@@ -198,35 +216,3 @@ class temperatureControl:
                 self.lbl.config(text="please enter number between 50 and 150")
         except:
             self.lbl.config(text="please enter number between 50 and 150")
-            
-#logging
-
-    def creatLog(self):
-        if not os.path.exists(os.path.dirname("logs/tempLog.csv")):
-            try:
-                os.makedirs(os.path.dirname("logs/tempLogs.csv"))
-            except OSError as exc: # Guard against race condition
-                if exc.errno != errno.EEXIST:
-                    raise
-        try:
-            open("logs/tempLog.csv","r")
-            print("a")
-        except:
-            File=open("logs/tempLog.csv","+w")
-            File.write("date,time,temp\n")
-            print("b")
-
-    def logInfo(self,temp):
-        try:
-            FileTemp=open("logs/tempLog.csv","+r")
-            Temp=FileTemp.read()
-            FileTemp.close()
-            File=open("logs/tempLog.csv","+w")
-            t=time.localtime()
-            String="{0}{1}/{2}/{3},{4}:{5},{6}\n".format(Temp,t[0],t[1],t[2],t[3],t[4],temp)
-            File.write(String)
-            File.close()
-        except:
-            pass
-        
-             

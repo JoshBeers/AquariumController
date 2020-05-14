@@ -9,7 +9,7 @@ class emailSystem:
         
 
     def sendMessage(self,message):
-        return
+        #return
         server=smtplib.SMTP('smtp.gmail.com',self.port)
         server.starttls(context=self.context)
         server.login(self.fro,'Tank123?Warn')
