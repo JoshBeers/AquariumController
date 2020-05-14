@@ -54,5 +54,7 @@ class pump:
         
     
 p = pump([0,1])
-p.sendCode(1397077)
+p.sendCode(1381716)
+p.sendCode(1381716)
+
     

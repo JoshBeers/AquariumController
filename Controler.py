@@ -7,7 +7,6 @@ import signal
 import emailSystem
 import settingSaver
 import atoSystem as ato
-#import RPi.GPIO as GPIO
 
 
 '''
@@ -44,16 +43,24 @@ import atoSystem as ato
 root=Tk()
 root.geometry('1000x800')
 colors=["grey","black","black"]
-panelSize=[250,400]
+panelSize=[300,400]
 root.config(bg=colors[0])
+
+#config for equpiment
+atoPump = [1397077,1397076]
+pumps = [1381717,1381716]
+
+tankSensorLocation= 27
+sumpSensorLocation = 22
+atoSensorLocation = 2
 
 #objects
 
 emails=emailSystem.emailSystem()
-pumps=pumpController.pumpController(root,colors,panelSize,emails)  #ad DNC loactions
+pumps=pumpController.pumpController(root,colors,panelSize,emails,pumps,tankSensorLocation,sumpSensorLocation,atoSensorLocation)  #ad DNC loactions
 #lights=tankLigthControler.lightControler(root,colors,panelSize)  #add locations
 heating=temperatureControl.temperatureControl(78,root,colors,panelSize,emails) #add locations
-ato = ato.atoSystem(root,colors,panelSize,emails) #add locations
+ato = ato.atoSystem(root,colors,panelSize,emails,atoPump,sumpSensorLocation,atoSensorLocation) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
 
 
@@ -67,7 +74,6 @@ def on_closing():
     #lights.Off()
     #heating.End()
     root.destroy()
-    #GPIO.cleanup()
 
 def opening():
     temp=saveUtility.getSaved()

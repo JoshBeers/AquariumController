@@ -3,10 +3,12 @@ import pump as p
 import floatSensor as s
 from tkinter import * 
 from threading import Thread
+import RPi.GPIO as gpio
+
 
 class atoSystem:
 
-    def __init__(self,root,GUIcolors,pSize,emailSystem,pumpFrequency=[17,18],sumpwaterLevelSensor=3,atoResSensor = 4):
+    def __init__(self,root,GUIcolors,pSize,emailSystem,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
 
         self.atoPump=p.pump(pumpFrequency)
         self.sumpwaterLevelSensor = s.floatSensor(sumpwaterLevelSensor)
@@ -64,22 +66,25 @@ class atoSystem:
         self.atoPump.lock=False
         self.opperationalStatus=True
         t.sleep(1)
-        sleepTime = 300
+        sleepTime = 1
         self.updateGui()
         while self.opperationalStatus:
-            #if suimp level low and res has water
-            if(self.sumpwaterLevelSensor and self.atoResSensor):
-                sleepTime = .1
+            #print(self.atoPump.status)
+            #if sump level low and res has water
+            if(self.sumpwaterLevelSensor.getLevel() == 0 and self.atoResSensor.getLevel() ==0):
                 self.atoPump.On()
-            elif not self.atoResSensor:
+                print("Test1")
+            #if res needs refilled
+            elif self.atoResSensor.getLevel() == 1:
+                print("Test2")
                 if not self.needsWater:
                     self.emailSystem.sendMessage("ato res needs water")
                 self.needsWater = True
                 self.atoPump.Off()
                 self.opperationalStatus = False
             else:
-               self.atoPump.Off()
-               sleepTime = 300
+                print("Test3")
+                self.atoPump.Off()
             self.updateGui()
             t.sleep(sleepTime)
 
@@ -107,17 +112,17 @@ class atoSystem:
 
         sumpLevelLabel = Label(frame,text="sump level status: ",fg=fgC,bg=bgC,justify=RIGHT)
         sumpLevelLabel.grid(row=2,column=0)
-        self.sumpLevelStatus=Label(frame,text="{0}".format(not self.sumpwaterLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
+        self.sumpLevelStatus=Label(frame,text="{0}".format(self.sumpwaterLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
         self.sumpLevelStatus.grid(row=2,column=1)
 
-        atoResLabel = Label(frame,text="Ato res level status: ",fg=fgC,bg=bgC,justify=RIGHT)
+        atoResLabel = Label(frame,text="Ato res needs filled: ",fg=fgC,bg=bgC,justify=RIGHT)
         atoResLabel.grid(row=3,column=0)
-        self.atoResStatus=Label(frame,text="{0}".format(not self.atoResSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
+        self.atoResStatus=Label(frame,text="{0}".format(self.atoResSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
         self.atoResStatus.grid(row=3,column=1)
 
-        atoPumpLabel = Label(frame,text="Ato pump level status: ",fg=fgC,bg=bgC,justify=RIGHT)
+        atoPumpLabel = Label(frame,text="Ato pump status: ",fg=fgC,bg=bgC,justify=RIGHT)
         atoPumpLabel.grid(row=4,column=0)
-        self.atoPumpStatus=Label(frame,text="{0}".format(not self.atoPump.status),fg=fgC,bg=bgC,justify=LEFT)
+        self.atoPumpStatus=Label(frame,text="{0}".format(self.atoPump.status),fg=fgC,bg=bgC,justify=LEFT)
         self.atoPumpStatus.grid(row=4,column=1)
 
         systemOnButton = Button(frame,text="System On",bg=bgC,fg=fgC,width=buttonWidth,command=lambda: self.on())
@@ -142,9 +147,9 @@ class atoSystem:
     
     def updateGui(self):
         self.atoStatus.config(text="{0}".format(self.opperationalStatus))
-        self.sumpLevelStatus.config(text="{0}".format(not self.sumpwaterLevelSensor.getLevel()))
-        self.atoResStatus.config(text="{0}".format(not self.atoResSensor.getLevel()))
-        self.atoPumpStatus.config(text="{0}".format(not self.atoPump.status))
+        self.sumpLevelStatus.config(text="{0}".format(self.sumpwaterLevelSensor.getLevel()))
+        self.atoResStatus.config(text="{0}".format(self.atoResSensor.getLevel()))
+        self.atoPumpStatus.config(text="{0}".format(self.atoPump.status))
 
 
 

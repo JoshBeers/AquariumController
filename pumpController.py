@@ -67,14 +67,17 @@ class pumpController:
     '''
 
     def run(self):
+        self.hasWarning=True
+        self.warning='none'
         self.pumps.normalize()
         self.opperationalStatus=True
         t.sleep(1)
         self.pumps.On()
         while self.opperationalStatus:
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
-            if (self.sumpLevelSensor.getLevel() and not self.atoReserveSensor.getLevel()) or (not self.tankLevelSensor.getLevel()):
+            if (self.sumpLevelSensor.getLevel()==0 and self.atoReserveSensor.getLevel() == 1) or (self.tankLevelSensor.getLevel()==1):
                 print("something is wrong")
+                self.pumps.lock = False
                 self.pumps.Off()
                 self.pumpsCach=False
                 self.pumps.lock=True
@@ -122,12 +125,12 @@ class pumpController:
         self.mPS.grid(row=2,column=1)
 
 
-        tLSL=Label(frame,text="Tank Too High Status: ",fg=fgC,bg=bgC,justify=RIGHT)
+        tLSL=Label(frame,text="Tank Too High Status(0): ",fg=fgC,bg=bgC,justify=RIGHT)
         tLSL.grid(row=4,column=0)
         self.tLS=Label(frame,text="{0}".format(not self.tankLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
         self.tLS .grid(row=4,column=1)
 
-        sLSL=Label(frame,text="sump Too low Status: ",fg=fgC,bg=bgC,justify=RIGHT)
+        sLSL=Label(frame,text="sump Status 1=good: ",fg=fgC,bg=bgC,justify=RIGHT)
         sLSL.grid(row=5,column=0)
         self.sLS=Label(frame,text="{0}".format(not self.sumpLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
         self.sLS .grid(row=5,column=1)
@@ -163,8 +166,8 @@ class pumpController:
 
     def updateGUI(self):
         self.mPS.config(text="{0}".format(self.pumps.status))
-        self.tLS.config(text="{0}".format(not self.tankLevelSensor.getLevel()))
-        self.sLS.config(text="{0}".format(not self.sumpLevelSensor.getLevel()))
+        self.tLS.config(text="{0}".format(self.tankLevelSensor.getLevel()))
+        self.sLS.config(text="{0}".format(self.sumpLevelSensor.getLevel()))
         self.w.config(text="{0}".format(self.warning))
         self.mPLS.config(text="{0}".format(self.pumps.lock))
         self.pSS.config(text="{0}".format(self.opperationalStatus))
