@@ -36,7 +36,7 @@ class pump:
             self.Off()
 
     def userAction(self, status):
-        print(status)
+        #print(status)
         self.lock = False
         if(status):
             self.On()

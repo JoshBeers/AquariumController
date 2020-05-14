@@ -73,17 +73,17 @@ class atoSystem:
             #if sump level low and res has water
             if(self.sumpwaterLevelSensor.getLevel() == 0 and self.atoResSensor.getLevel() ==0):
                 self.atoPump.On()
-                print("Test1")
+                #print("Test1")
             #if res needs refilled
             elif self.atoResSensor.getLevel() == 1:
-                print("Test2")
+                #print("Test2")
                 if not self.needsWater:
                     self.emailSystem.sendMessage("ato res needs water")
                 self.needsWater = True
                 self.atoPump.Off()
                 self.opperationalStatus = False
             else:
-                print("Test3")
+                #print("Test3")
                 self.atoPump.Off()
             self.updateGui()
             t.sleep(sleepTime)

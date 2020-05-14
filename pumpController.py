@@ -76,7 +76,7 @@ class pumpController:
         while self.opperationalStatus:
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
             if (self.sumpLevelSensor.getLevel()==0 and self.atoReserveSensor.getLevel() == 1) or (self.tankLevelSensor.getLevel()==1):
-                print("something is wrong")
+                #print("something is wrong")
                 self.pumps.lock = False
                 self.pumps.Off()
                 self.pumpsCach=False
@@ -91,7 +91,7 @@ class pumpController:
             else:
                 self.pumps.On()
                 self.pumpsCach=True
-                print("it is on")
+                #print("it is on")
             self.updateGUI()
             t.sleep(1)
 
