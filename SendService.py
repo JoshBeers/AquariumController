@@ -1,5 +1,5 @@
 import time
-import RFSSendingCode
+import RFSendingCode
 from threading import Thread
 from RPi import GPIO
 
@@ -43,8 +43,7 @@ class SendService:
         temp = True
         while temp:
             #try:
-                GPIO.setmode(GPIO.BCM)
-                self.rfdevice = RFSSendingCode.RFDevice(17) 
+                self.rfdevice = RFSendingCode.RFDevice(17)
                 self.rfdevice.enable_tx()
                 self.rfdevice.tx_repeat = 7
                 self.rfdevice.tx_code(code,1,415,24)
