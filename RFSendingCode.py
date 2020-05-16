@@ -169,6 +169,7 @@ class RFDevice:
             return False
         GPIO.output(self.gpio, GPIO.HIGH)
         self._sleep((highpulses * self.tx_pulselength) / 1000000)
+        GPIO.setmode(GPIO.BCM)
         GPIO.output(self.gpio, GPIO.LOW)
         self._sleep((lowpulses * self.tx_pulselength) / 1000000)
         return True
