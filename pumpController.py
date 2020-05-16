@@ -5,8 +5,8 @@ from tkinter import *
 from threading import Thread
 
 class pumpController:
-    def __init__(self,root,GUIcolors,pSize,em,logger,pumpFrequency=[17,18],tankWaterLevelSensor=2,sumpwaterLevelSensor=3,atoResSensor = 4):
-        self.pumps=p.pump(pumpFrequency)
+    def __init__(self,root,GUIcolors,pSize,em,logger,sender,pumpFrequency=[17,18],tankWaterLevelSensor=2,sumpwaterLevelSensor=3,atoResSensor = 4):
+        self.pumps=p.pump(pumpFrequency,sender)
         self.opperationalStatus=False
         self.tankLevelSensor=s.floatSensor(tankWaterLevelSensor)  # sensor in tank
         self.sumpLevelSensor=s.floatSensor(sumpwaterLevelSensor) # sensor that tells if too little water in resivour\

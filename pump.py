@@ -5,11 +5,12 @@ import time
 class pump:
 
 
-    def __init__(self,frequencys):
+    def __init__(self,frequencys,sendService):
         self.status=False
         self.frequencys=frequencys
         self.lock=False
         self.cach=False 
+        self.sendService = sendService
 
 
 
@@ -47,18 +48,7 @@ class pump:
         self.lock = True
 
     def sendCode(self, code):
-        tempBool = True
-        while tempBool:
-            try:
-                self.rfdevice = RFDevice(17) 
-                self.rfdevice.enable_tx()
-                self.rfdevice.tx_repeat = 7
-                self.rfdevice.tx_code(code,1,415,24)
-                self.rfdevice.cleanup()
-                tempBool = False
-            except:
-                print('send code error')
-            time.sleep(.1)
+        self.sendService.sendCode(code)
                 
            
         
