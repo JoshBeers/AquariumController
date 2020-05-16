@@ -1,13 +1,13 @@
 import time
-from rpi_rf import RFDevice
+import RFSSendingCode
 from threading import Thread
+from RPi import GPIO
+
 
 
 class SendService:
 
-    rfdevice = RFDevice(17) 
-    rfdevice.enable_tx()
-    rfdevice.tx_repeat = 7
+    
 
     
     def __init__(self):
@@ -28,7 +28,7 @@ class SendService:
         self.t.start()
 
     def close(self):
-        self.rfdevice.cleanup()
+        SendService.rfdevice.cleanup()
         self.opperationalStatus = False
         
     def _run(self):
@@ -39,12 +39,23 @@ class SendService:
                 print('code out')
 
     def _sendingCode(self,code):
-        while True:
-            try:
+        
+        temp = True
+        while temp:
+            #try:
+                GPIO.setmode(GPIO.BCM)
+                self.rfdevice = RFSSendingCode.RFDevice(17) 
+                self.rfdevice.enable_tx()
+                self.rfdevice.tx_repeat = 7
                 self.rfdevice.tx_code(code,1,415,24)
-                break
-            except:
-                print('code error')
+                self.rfdevice.cleanup()
+                temp = False
+            #except:
+                print('send error')
+        
+        
+            
+
             
 
 
