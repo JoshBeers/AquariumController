@@ -8,10 +8,10 @@ import RPi.GPIO as gpio
 
 class atoSystem:
 
-    def __init__(self,root,GUIcolors,pSize,emailSystem,logger,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
+    def __init__(self,root,GUIcolors,pSize,emailSystem,logger,sender,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
         self.logger = logger
 
-        self.atoPump=p.pump(pumpFrequency)
+        self.atoPump=p.pump(pumpFrequency,sender)
         self.sumpwaterLevelSensor = s.floatSensor(sumpwaterLevelSensor)
         self.atoResSensor = s.floatSensor(atoResSensor)
 

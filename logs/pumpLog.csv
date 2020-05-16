@@ -228,3 +228,8 @@ date,time,system status,pumps status,tank water level status(0 good),sump water 
 05/16/20,03:30:46,True,False,0,0,system turned on,
 05/16/20,03:34:16,True,False,0,0,system turned on,
 05/16/20,03:34:53,False,False,0,0,,sump water level is too low and ato is empty
+05/16/20,04:07:11,False,False,0,0,system turned off,
+05/16/20,04:07:44,False,False,0,0,system turned off,
+05/16/20,04:08:40,False,False,0,0,system turned off,
+05/16/20,04:10:48,False,False,0,0,system turned off,
+05/16/20,04:13:26,False,False,0,0,system turned off,
