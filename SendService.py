@@ -4,6 +4,11 @@ from threading import Thread
 
 
 class SendService:
+
+    rfdevice = RFDevice(17) 
+    rfdevice.enable_tx()
+    rfdevice.tx_repeat = 7
+
     
     def __init__(self):
         self.workingList = []
@@ -18,7 +23,6 @@ class SendService:
         print('code added')
 
     def startUp(self):
-        rfdevice = RFDevice(17) 
         self.opperationalStatus = True
         self.t=Thread(target=self._run)
         self.t.start()
@@ -40,8 +44,7 @@ class SendService:
                 self.rfdevice.tx_code(code,1,415,24)
                 break
             except:
-                e = sys.exc_info()[0]
-                print(e)
+                print('code error')
             
 
 
