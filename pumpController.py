@@ -45,6 +45,10 @@ class pumpController:
         self.opperationalStatus=False
         self.pumps.lock=False
         self.pumps.Off()
+        t.sleep(.53)
+        self.pumps.Off()
+        t.sleep(.15)
+        self.pumps.Off()
         self.updateGUI()
         self.log('system turned off')
 
@@ -58,6 +62,8 @@ class pumpController:
 
     def pumpsNorm(self):
         self.pumps.normalize()
+        if(not self.opperationalStatus):
+            self.pumps.Off()
         self.updateGUI()
         self.log('user normalized pumps')
 
@@ -81,15 +87,21 @@ class pumpController:
     def run(self):
         self.hasWarning=True
         self.warning='none'
-        self.pumps.normalize()
+        #self.pumps.normalize()
+        self.pumps.lock = False
         self.opperationalStatus=True
-        t.sleep(1)
+        t.sleep(3)
         self.pumps.On()
+        tempForPumpOn = 0
         while self.opperationalStatus:
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
             if (self.sumpLevelSensor.getLevel()==0 and self.atoReserveSensor.getLevel() == 1) or (self.tankLevelSensor.getLevel()==1):
                 #print("something is wrong")
                 self.pumps.lock = False
+                self.pumps.Off()
+                t.sleep(.34)
+                self.pumps.Off()
+                t.sleep(.56)
                 self.pumps.Off()
                 self.pumpsCach=False
                 self.pumps.lock=True
@@ -97,13 +109,19 @@ class pumpController:
                 self.warning='sump water level is too low and ato is empty'
                 if not self.tankLevelSensor.getLevel():
                     self.warning='tank water level is high'
-                self.emailSystem.sendMessage(self.warning)
+                try:
+                    self.emailSystem.sendMessage(self.warning)
+                except:
+                    self.log('error in email system')
                 self.hasWarning=True
                 self.log('',self.warning)
                 #if everything is ok it turns the pumps on
             else:
-                self.pumps.On()
+                if(tempForPumpOn%10 ==0):
+                    self.pumps.On()
+                    print('pumps on from pump Controller')
                 self.pumpsCach=True
+                tempForPumpOn+=1
                 #print("it is on")
             self.updateGUI()
             t.sleep(1)

@@ -1,4 +1,5 @@
 from rpi_rf import RFDevice
+import time
 
 
 class pump:
@@ -32,8 +33,8 @@ class pump:
         self.lock = False
         if(self.cach):
             self.On()
-        else:
-            self.Off()
+            return
+        self.Off()
 
     def userAction(self, status):
         #print(status)
@@ -46,15 +47,25 @@ class pump:
         self.lock = True
 
     def sendCode(self, code):
-        self.rfdevice = RFDevice(17) 
-        self.rfdevice.enable_tx()
-        self.rfdevice.tx_repeat = 7
-        self.rfdevice.tx_code(code,1,415,24)
-        self.rfdevice.cleanup()
+        tempBool = True
+        while tempBool:
+            try:
+                self.rfdevice = RFDevice(17) 
+                self.rfdevice.enable_tx()
+                self.rfdevice.tx_repeat = 7
+                self.rfdevice.tx_code(code,1,415,24)
+                self.rfdevice.cleanup()
+                tempBool = False
+            except:
+                print('send code error')
+            time.sleep(.1)
+                
+           
         
-    
+'''
 p = pump([0,1])
 p.sendCode(1381716)
 p.sendCode(1381716)
+'''
 
     

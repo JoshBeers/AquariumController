@@ -67,7 +67,7 @@ class atoSystem:
             if tank is low water pumped
     '''
 
-    def log(message= '',warning=''):
+    def log(self,message= '',warning=''):
         self.logger.ato(self.opperationalStatus,self.sumpwaterLevelSensor.getLevel(),self.atoResSensor.getLevel(),message,warning)
         
 
@@ -77,26 +77,38 @@ class atoSystem:
         t.sleep(1)
         sleepTime = 1
         self.updateGui()
+        tempForPumpOn = 0
         while self.opperationalStatus:
             #print(self.atoPump.status)
             #if sump level low and res has water
-            if(self.sumpwaterLevelSensor.getLevel() == 0 and self.atoResSensor.getLevel() ==0):
-                self.atoPump.On()
+            if(self.sumpwaterLevelSensor.getLevel() == 0 and self.atoResSensor.getLevel() == 0):
+                if(tempForPumpOn%50 == 0):
+                    self.atoPump.On()
+                    #print('pump on from ato temp var = {0} and temp%50={1}'.format(tempForPumpOn,tempForPumpOn%50))
                 self.log('pump turned on')
+                sleepTime = .1
+                tempForPumpOn = tempForPumpOn+1
                 #print("Test1")
             #if res needs refilled
             elif self.atoResSensor.getLevel() == 1:
                 #print("Test2")
                 if not self.needsWater:
-                    self.emailSystem.sendMessage("ato res needs water")
+                    self.warning = 'ato res needs water'
+                try:
+                    self.emailSystem.sendMessage(self.warning)
+                except:
+                    self.log('error in email system')
                 self.needsWater = True
                 self.atoPump.Off()
                 self.opperationalStatus = False
                 self.log('res too low','res to low')
+                tempForPumpOn = 0
             else:
                 #print("Test3")
                 self.atoPump.Off()
                 self.log('pump turned off')
+                sleepTime = 10
+                tempForPumpOn = 0
             self.updateGui()
             t.sleep(sleepTime)
 

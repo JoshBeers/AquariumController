@@ -51,8 +51,5 @@ class Logger:
         file.write('\n{0},{1},{2},{3},{4},{5},{6}'.format(now.strftime("%x"),now.strftime("%X"),systemStatus,sumpStatus,atoResStatus,message,warning))
         file.close()
 
-    
 
-l = Logger()
-l.pump(1,2,2)
 

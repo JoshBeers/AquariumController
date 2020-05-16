@@ -9,11 +9,14 @@ class emailSystem:
         
 
     def sendMessage(self,message):
-        #return
+        
         server=smtplib.SMTP('smtp.gmail.com',self.port)
         server.starttls(context=self.context)
-        server.login(self.fro,'Tank123?Warn')
-        server.sendmail(self.fro,self.to,message)
+        try:
+            server.login(self.fro,'Tank123?Warn')
+            server.sendmail(self.fro,self.to,message)
+        except:
+            print('email error')
         server.quit()
 
 '''

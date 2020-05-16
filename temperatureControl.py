@@ -35,7 +35,6 @@ class temperatureControl:
 
         self.secondPartOgGUI()
 
-        self.creatLog()
 
 #Public stuff
     def On(self):
@@ -109,7 +108,7 @@ class temperatureControl:
                   self.heater.On()
                   self.log("heater turned on")
                 else:
-                   self.heater.Off()
+                    self.heater.Off()
                     self.log('heater turned off')
             if (temp-5)>self.temperatureSetting and not self.warned:
                 self.warning='tank temperature is too low'
