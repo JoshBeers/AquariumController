@@ -8,8 +8,8 @@ import errno
 
 class temperatureControl:
 
-    def __init__(self,tempSet,root,GUIcolors,pSize,em,logger,heaterLoaction=22):
-        self.heater=h.heater(heaterLoaction)
+    def __init__(self,tempSet,root,GUIcolors,pSize,em,logger,sender,heaterLoaction=22):
+        self.heater=h.heater(heaterLoaction,sender)
         self.thermometer=te.thermometer()
         self.temperatureSetting=tempSet
         self.opperationStatus=True
