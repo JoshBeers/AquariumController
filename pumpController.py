@@ -5,8 +5,8 @@ from tkinter import *
 from threading import Thread
 
 class pumpController:
-    def __init__(self,root,GUIcolors,pSize,em,logger,sender,pumpFrequency=[17,18],tankWaterLevelSensor=2,sumpwaterLevelSensor=3,atoResSensor = 4):
-        self.pumps=p.pump(pumpFrequency,sender)
+    def __init__(self,root,GUIcolors,pSize,em,logger,pumpFrequency=[17,18],tankWaterLevelSensor=2,sumpwaterLevelSensor=3,atoResSensor = 4):
+        self.pumps=p.pump(pumpFrequency)
         self.opperationalStatus=False
         self.tankLevelSensor=s.floatSensor(tankWaterLevelSensor)  # sensor in tank
         self.sumpLevelSensor=s.floatSensor(sumpwaterLevelSensor) # sensor that tells if too little water in resivour\
@@ -45,9 +45,9 @@ class pumpController:
         self.opperationalStatus=False
         self.pumps.lock=False
         self.pumps.Off()
-        t.sleep(.53)
+        t.sleep(.1)
         self.pumps.Off()
-        t.sleep(.15)
+        t.sleep(.1)
         self.pumps.Off()
         self.updateGUI()
         self.log('system turned off')
@@ -90,7 +90,6 @@ class pumpController:
         #self.pumps.normalize()
         self.pumps.lock = False
         self.opperationalStatus=True
-        t.sleep(3)
         self.pumps.On()
         tempForPumpOn = 0
         while self.opperationalStatus:
@@ -119,7 +118,7 @@ class pumpController:
             else:
                 if(tempForPumpOn%10 ==0):
                     self.pumps.On()
-                    print('pumps on from pump Controller')
+                    #print('pumps on from pump Controller')
                 self.pumpsCach=True
                 tempForPumpOn+=1
                 #print("it is on")

@@ -79,6 +79,7 @@ class RFDevice:
         """Disable TX, reset GPIO."""
         if self.tx_enabled:
             # set up GPIO pin as input for safety
+            GPIO.setmode(GPIO.BCM)
             GPIO.setup(self.gpio, GPIO.IN)
             self.tx_enabled = False
             _LOGGER.debug("TX disabled")
@@ -167,9 +168,12 @@ class RFDevice:
         if not self.tx_enabled:
             _LOGGER.error("TX is not enabled, not sending data")
             return False
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.gpio,GPIO.OUT)
         GPIO.output(self.gpio, GPIO.HIGH)
         self._sleep((highpulses * self.tx_pulselength) / 1000000)
         GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.gpio,GPIO.OUT)
         GPIO.output(self.gpio, GPIO.LOW)
         self._sleep((lowpulses * self.tx_pulselength) / 1000000)
         return True

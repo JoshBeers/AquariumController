@@ -8,10 +8,10 @@ import RPi.GPIO as gpio
 
 class atoSystem:
 
-    def __init__(self,root,GUIcolors,pSize,emailSystem,logger,sender,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
+    def __init__(self,root,GUIcolors,pSize,emailSystem,logger,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
         self.logger = logger
 
-        self.atoPump=p.pump(pumpFrequency,sender)
+        self.atoPump=p.pump(pumpFrequency)
         self.sumpwaterLevelSensor = s.floatSensor(sumpwaterLevelSensor)
         self.atoResSensor = s.floatSensor(atoResSensor)
 
@@ -74,7 +74,6 @@ class atoSystem:
     def run(self):
         self.atoPump.lock=False
         self.opperationalStatus=True
-        t.sleep(1)
         sleepTime = 1
         self.updateGui()
         tempForPumpOn = 0

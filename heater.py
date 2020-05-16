@@ -1,9 +1,8 @@
 #import RPi.GPIO as GPIO
 class heater:
-    def __init__(self,n,sender):
+    def __init__(self,n):
         self.location=n
         self.status=False
-        self.sender= sender
   #      GPIO.setmode(GPIO.BCM)
   #      GPIO.setup(self.location,GPIO.OUT)
 

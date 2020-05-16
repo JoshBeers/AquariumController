@@ -1,16 +1,17 @@
 from rpi_rf import RFDevice
 import time
+import RFSendingCode
+
 
 
 class pump:
 
 
-    def __init__(self,frequencys,sendService):
+    def __init__(self,frequencys):
         self.status=False
         self.frequencys=frequencys
         self.lock=False
         self.cach=False 
-        self.sendService = sendService
 
 
 
@@ -48,8 +49,15 @@ class pump:
         self.lock = True
 
     def sendCode(self, code):
-        self.sendService.sendCode(code)
-                
+        #self.sendService.sendCode(code)
+        try:
+            self.rfdevice = RFSendingCode.RFDevice(17)
+            self.rfdevice.enable_tx()
+            self.rfdevice.tx_repeat = 7
+            self.rfdevice.tx_code(code,1,415,24)
+            self.rfdevice.cleanup()
+        except:
+            print('send code error')
            
         
 '''

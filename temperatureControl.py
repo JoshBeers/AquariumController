@@ -6,10 +6,11 @@ import thermometer as te
 import os
 import errno
 
+
 class temperatureControl:
 
-    def __init__(self,tempSet,root,GUIcolors,pSize,em,logger,sender,heaterLoaction=22):
-        self.heater=h.heater(heaterLoaction,sender)
+    def __init__(self,tempSet,root,GUIcolors,pSize,em,logger,heaterLoaction=22):
+        self.heater=h.heater(heaterLoaction)
         self.thermometer=te.thermometer()
         self.temperatureSetting=tempSet
         self.opperationStatus=True
