@@ -264,3 +264,139 @@ date,time,system status,pumps status,tank water level status(0 good),sump water 
 05/16/20,04:55:44,True,True,0,0,user normalized pumps,
 05/16/20,04:55:56,False,False,0,0,,tank water level is high
 05/16/20,04:56:17,False,False,0,0,system turned off,
+05/18/20,22:43:24,False,True,0,0,user turned pumps to True,
+05/18/20,22:43:28,False,False,0,0,system turned off,
+05/18/20,23:17:25,True,True,0,1,system turned on,
+05/18/20,23:17:31,False,False,0,1,,tank water level is high
+05/18/20,23:17:36,True,True,0,1,system turned on,
+05/18/20,23:17:41,False,False,0,0,,tank water level is high
+05/18/20,23:17:48,True,True,0,0,system turned on,
+05/18/20,23:17:51,False,False,0,0,,tank water level is high
+05/18/20,23:18:09,False,True,0,0,user turned pumps to True,
+05/18/20,23:18:11,False,False,0,0,user normalized pumps,
+05/18/20,23:18:15,False,False,0,0,system turned off,
+05/18/20,23:18:38,False,True,0,0,user turned pumps to True,
+05/18/20,23:18:54,False,False,0,0,user turned pumps to False,
+05/18/20,23:19:19,False,True,0,0,user turned pumps to True,
+05/18/20,23:20:06,True,True,0,1,system turned on,
+05/18/20,23:21:00,False,False,0,1,,tank water level is high
+05/18/20,23:21:10,False,True,0,1,user turned pumps to True,
+05/18/20,23:23:55,True,True,0,0,system turned on,
+05/18/20,23:23:58,False,False,0,1,,tank water level is high
+05/18/20,23:23:59,False,True,0,1,user turned pumps to True,
+05/18/20,23:24:35,True,True,0,1,system turned on,
+05/18/20,23:26:25,False,False,0,1,system turned off,
+05/18/20,23:28:33,True,True,0,1,system turned on,
+05/18/20,23:28:36,False,False,0,0,,tank water level is high
+05/18/20,23:28:39,True,True,0,0,system turned on,
+05/18/20,23:28:44,False,False,0,1,,tank water level is high
+05/18/20,23:28:47,True,True,0,1,system turned on,
+05/18/20,23:28:49,False,False,0,1,,tank water level is high
+05/18/20,23:28:58,True,True,0,1,system turned on,
+05/18/20,23:29:03,False,False,0,1,,tank water level is high
+05/18/20,23:29:13,True,True,0,1,system turned on,
+05/18/20,23:29:18,False,False,0,1,,tank water level is high
+05/18/20,23:29:26,False,True,0,1,user turned pumps to True,
+05/18/20,23:29:54,True,True,0,0,system turned on,
+05/18/20,23:29:57,False,False,0,1,,tank water level is high
+05/18/20,23:30:00,True,True,0,1,system turned on,
+05/18/20,23:30:03,False,False,0,1,,tank water level is high
+05/18/20,23:30:52,False,False,0,1,system turned off,
+05/18/20,23:30:58,True,True,0,1,system turned on,
+05/18/20,23:31:03,False,False,0,0,,tank high
+05/18/20,23:31:12,True,True,0,0,system turned on,
+05/18/20,23:31:15,False,False,0,1,,tank high
+05/18/20,23:31:23,True,True,0,1,system turned on,
+05/18/20,23:31:26,False,False,0,1,,tank high
+05/18/20,23:32:03,False,False,0,1,system turned off,
+05/18/20,23:32:09,True,True,1,0,system turned on,
+05/18/20,23:32:12,False,False,1,0,,sump too low, ato is empty
+05/18/20,23:32:39,False,False,1,0,system turned off,
+05/18/20,23:34:53,True,True,0,1,system turned on,
+05/18/20,23:35:00,False,False,0,1,,tank high
+05/18/20,23:35:04,True,True,0,1,system turned on,
+05/18/20,23:35:09,False,False,0,1,,tank high
+05/18/20,23:35:44,False,False,0,1,system turned off,
+05/18/20,23:35:52,True,False,0,1,system turned on,
+05/18/20,23:36:32,True,False,0,1,system turned on,
+05/18/20,23:36:35,False,False,0,1,,tank high
+05/18/20,23:37:24,False,False,0,1,system turned off,
+05/18/20,23:37:31,True,False,0,1,system turned on,
+05/18/20,23:37:44,False,False,0,0,,tank high
+05/18/20,23:38:22,True,False,0,0,system turned on,
+05/18/20,23:38:26,False,False,0,1,,tank high
+05/18/20,23:38:29,False,False,0,1,system turned off,
+05/18/20,23:39:01,True,False,0,1,system turned on,
+05/18/20,23:39:12,False,False,0,1,,tank high
+05/18/20,23:40:14,True,False,0,1,system turned on,
+05/18/20,23:40:17,False,False,0,0,,tank high
+05/18/20,23:40:23,False,True,0,0,user turned pumps to True,
+05/18/20,23:40:56,True,True,0,1,system turned on,
+05/18/20,23:41:19,False,False,0,1,,tank high
+05/18/20,23:42:18,False,False,0,1,user normalized pumps,
+05/18/20,23:42:19,True,False,0,1,system turned on,
+05/18/20,23:43:13,False,False,0,1,,tank high
+05/18/20,23:43:34,True,False,0,1,system turned on,
+05/18/20,23:44:00,False,False,0,1,,tank high
+05/18/20,23:44:04,True,False,0,1,system turned on,
+05/18/20,23:44:15,False,False,0,1,,tank high
+05/18/20,23:44:21,True,False,0,1,system turned on,
+05/18/20,23:44:24,False,False,0,1,,tank high
+05/18/20,23:46:26,False,False,0,1,system turned off,
+05/18/20,23:46:34,True,False,0,1,system turned on,
+05/18/20,23:47:10,False,False,0,1,,sump too low, ato is empty
+05/18/20,23:48:55,True,False,0,1,system turned on,
+05/18/20,23:49:04,False,False,0,1,,sump too low, ato is empty
+05/18/20,23:49:44,False,True,0,1,user turned pumps to True,
+05/19/20,00:04:15,True,True,0,1,system turned on,
+05/19/20,00:06:02,False,False,0,1,,sump too low, ato is empty
+05/19/20,00:06:21,True,False,0,1,system turned on,
+05/19/20,00:06:43,False,False,0,1,,tank high
+05/19/20,00:08:11,True,False,0,1,system turned on,
+05/19/20,00:09:06,False,False,0,0,,sump too low, ato is empty
+05/19/20,00:09:48,False,True,0,1,user turned pumps to True,
+05/19/20,00:10:22,False,False,1,0,user turned pumps to False,
+05/19/20,00:10:49,True,False,0,1,system turned on,
+05/19/20,00:47:41,False,False,0,0,,sump too low, ato is empty
+05/19/20,00:48:06,True,False,0,1,system turned on,
+05/19/20,00:48:09,False,False,0,0,,sump too low, ato is empty
+05/19/20,00:48:10,True,False,0,0,system turned on,
+05/19/20,00:48:15,False,False,0,0,,sump too low, ato is empty
+05/19/20,00:48:26,True,False,0,0,system turned on,
+05/19/20,21:14:50,False,False,0,1,system turned off,
+05/19/20,21:14:54,True,False,0,1,system turned on,
+05/19/20,21:16:25,False,False,1,1,,tank high
+05/19/20,21:16:41,True,False,0,1,system turned on,
+05/19/20,21:16:48,True,True,0,1,system turned on,
+05/19/20,22:13:16,False,False,0,1,,sump too low, ato is empty
+05/19/20,22:13:17,False,False,0,1,,sump too low, ato is empty
+05/19/20,22:13:29,False,True,0,1,user turned pumps to True,
+05/19/20,22:14:31,True,True,0,1,system turned on,
+05/19/20,22:14:39,False,False,0,1,,sump too low, ato is empty
+05/19/20,22:14:58,True,False,0,1,system turned on,
+05/19/20,22:16:05,False,False,0,1,,sump too low, ato is empty
+05/19/20,22:16:24,False,True,0,1,user turned pumps to True,
+05/19/20,22:22:03,True,True,0,1,system turned on,
+05/19/20,22:25:15,False,False,0,1,,sump too low, ato is empty
+05/19/20,22:27:11,True,False,0,1,system turned on,
+05/19/20,22:28:34,True,True,0,1,system turned on,
+05/19/20,22:28:51,False,False,0,0,,sump too low, ato is empty
+05/19/20,22:28:52,False,False,0,0,,sump too low, ato is empty
+05/19/20,22:28:58,False,True,0,0,user turned pumps to True,
+05/19/20,22:30:32,True,True,0,1,system turned on,
+05/19/20,22:32:32,False,False,0,1,,sump too low, ato is empty
+05/19/20,22:32:41,True,False,0,1,system turned on,
+05/19/20,22:32:45,True,True,0,1,user turned pumps to True,
+05/19/20,22:34:38,False,False,0,1,system turned off,
+05/19/20,22:34:39,False,True,0,1,user turned pumps to True,
+05/19/20,22:34:40,False,True,0,1,user turned pumps to True,
+05/19/20,22:40:07,True,True,0,1,system turned on,
+05/20/20,03:11:46,True,False,0,1,user turned pumps to False,
+05/20/20,03:15:35,True,False,0,1,user turned pumps to False,
+05/20/20,03:30:22,True,True,0,1,user normalized pumps,
+05/21/20,07:28:31,False,False,0,1,,sump too low, ato is empty
+05/21/20,09:11:46,True,False,0,1,system turned on,
+05/21/20,09:12:30,False,False,0,1,,sump too low, ato is empty
+05/21/20,09:12:53,False,True,0,1,user turned pumps to True,
+05/21/20,09:15:56,True,True,0,1,system turned on,
+05/21/20,19:30:44,True,False,0,1,system turned on,

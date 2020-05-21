@@ -90,11 +90,16 @@ class pumpController:
         #self.pumps.normalize()
         self.pumps.lock = False
         self.opperationalStatus=True
+        t.sleep(.1)
         self.pumps.On()
         tempForPumpOn = 0
         while self.opperationalStatus:
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
-            if (self.sumpLevelSensor.getLevel()==0 and self.atoReserveSensor.getLevel() == 1) or (self.tankLevelSensor.getLevel()==1):
+            print(self.tankLevelSensor.getLevel())
+            sumpSensor = self.sumpLevelSensor.getLevel()
+            atoSensor = self.atoReserveSensor.getLevel()
+            tankSensor = self.tankLevelSensor.getLevel()
+            if (sumpSensor==0 and atoSensor == 1) or (tankSensor==1):
                 #print("something is wrong")
                 self.pumps.lock = False
                 self.pumps.Off()
@@ -105,9 +110,9 @@ class pumpController:
                 self.pumpsCach=False
                 self.pumps.lock=True
                 self.opperationalStatus=False
-                self.warning='sump water level is too low and ato is empty'
-                if not self.tankLevelSensor.getLevel():
-                    self.warning='tank water level is high'
+                self.warning='sump too low, ato is empty'
+                if tankSensor == 1:
+                    self.warning='tank high'
                 try:
                     self.emailSystem.sendMessage(self.warning)
                 except:
