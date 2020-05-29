@@ -135,7 +135,7 @@ class temperatureControl:
         bdC=self.bdC
         self.frame=Frame(root,width=self.pX,heigh=self.pY,highlightbackground=bdC,highlightthickness=1,bg=bgC)
         self.frame.grid_propagate(0)
-        self.frame.grid(row=0,column=2)
+        self.frame.grid(row=1,column=0)
 
         mainLabel=Label(self.frame,text="heater system",fg=fgC,bg=bgC)
         mainLabel.grid(row=0,columnspan=3)

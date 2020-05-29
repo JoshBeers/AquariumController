@@ -8,7 +8,7 @@ class pumpController:
     def __init__(self,root,GUIcolors,pSize,em,logger,pumps,tankWaterLevelSenso,sumpwaterLevelSensor,atoResSensor):
         self.pumps=pumps
         self.opperationalStatus=False
-        self.tankLevelSensor=tankWaterLevelSensor  # sensor in tank
+        self.tankLevelSensor=tankWaterLevelSenso  # sensor in tank
         self.sumpLevelSensor=sumpwaterLevelSensor # sensor that tells if too little water in resivour\
         self.atoReserveSensor = atoResSensor
 
@@ -95,10 +95,10 @@ class pumpController:
         tempForPumpOn = 0
         while self.opperationalStatus:
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
-            print(self.tankLevelSensor.getLevel())
-            sumpSensor = self.sumpLevelSensor.getLevel()
-            atoSensor = self.atoReserveSensor.getLevel()
-            tankSensor = self.tankLevelSensor.getLevel()
+           # print(self.tankLevelSensor.getLevel())
+            sumpSensor = self.sumpLevelSensor.level
+            atoSensor = self.atoReserveSensor.level
+            tankSensor = self.tankLevelSensor.level
             if (sumpSensor==0 and atoSensor == 1) or (tankSensor==1):
                 #print("something is wrong")
                 self.pumps.lock = False
@@ -153,29 +153,6 @@ class pumpController:
         pSSL.grid(row=1,column=0)
         self.pSS=Label(frame,text="{0}".format(self.opperationalStatus),fg=fgC,bg=bgC,justify=LEFT)
         self.pSS.grid(row=1,column=1)
-
-        mPSL=Label(frame,text="Pumps Status: ",fg=fgC,bg=bgC,justify=RIGHT)
-        mPSL.grid(row=2,column=0)
-        self.mPS=Label(frame,text="{0}".format(self.pumps.status),fg=fgC,bg=bgC,justify=LEFT)
-        self.mPS.grid(row=2,column=1)
-
-
-        tLSL=Label(frame,text="Tank Too High Status(0): ",fg=fgC,bg=bgC,justify=RIGHT)
-        tLSL.grid(row=4,column=0)
-        self.tLS=Label(frame,text="{0}".format(not self.tankLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
-        self.tLS .grid(row=4,column=1)
-
-        sLSL=Label(frame,text="sump Status 1=good: ",fg=fgC,bg=bgC,justify=RIGHT)
-        sLSL.grid(row=5,column=0)
-        self.sLS=Label(frame,text="{0}".format(not self.sumpLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
-        self.sLS .grid(row=5,column=1)
-
-        mPLL=Label(frame,text="pumps locked: ",fg=fgC,bg=bgC,justify=RIGHT)
-        mPLL.grid(row=6,column=0)
-        self.mPLS=Label(frame,text="{0}".format(self.pumps.lock),fg=fgC,bg=bgC,justify=LEFT)
-        self.mPLS.grid(row=6,column=1)
-
-
         wL=Label(frame,text="warnings: ",fg=fgC,bg=bgC,justify=RIGHT)
         wL.grid(row=8,column=0)
         self.w=Label(frame,text="{0}".format(self.warning),fg=fgC,bg=bgC,justify=LEFT)
@@ -200,11 +177,6 @@ class pumpController:
 
 
     def updateGUI(self):
-        self.mPS.config(text="{0}".format(self.pumps.status))
-        self.tLS.config(text="{0}".format(self.tankLevelSensor.getLevel()))
-        self.sLS.config(text="{0}".format(self.sumpLevelSensor.getLevel()))
-        self.w.config(text="{0}".format(self.warning))
-        self.mPLS.config(text="{0}".format(self.pumps.lock))
         self.pSS.config(text="{0}".format(self.opperationalStatus))
 
 

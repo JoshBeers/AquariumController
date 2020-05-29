@@ -11,9 +11,9 @@ class atoSystem:
     def __init__(self,root,GUIcolors,pSize,emailSystem,logger,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
         self.logger = logger
 
-        self.atoPump=p.pump(pumpFrequency)
-        self.sumpwaterLevelSensor = s.floatSensor(sumpwaterLevelSensor)
-        self.atoResSensor = s.floatSensor(atoResSensor)
+        self.atoPump=pumpFrequency
+        self.sumpwaterLevelSensor = sumpwaterLevelSensor
+        self.atoResSensor = atoResSensor
 
         self.opperationalStatus=False
 
@@ -80,7 +80,10 @@ class atoSystem:
         while self.opperationalStatus:
             #print(self.atoPump.status)
             #if sump level low and res has water
-            if(self.sumpwaterLevelSensor.getLevel() == 0 and self.atoResSensor.getLevel() == 0):
+            sumpLevel = self.sumpwaterLevelSensor.level
+            atoLevel = self.atoResSensor.level
+            
+            if(sumpLevel == 0 and atoLevel == 0):
                 if(tempForPumpOn%50 == 0):
                     self.atoPump.On()
                     #print('pump on from ato temp var = {0} and temp%50={1}'.format(tempForPumpOn,tempForPumpOn%50))
@@ -89,7 +92,7 @@ class atoSystem:
                 tempForPumpOn = tempForPumpOn+1
                 #print("Test1")
             #if res needs refilled
-            elif self.atoResSensor.getLevel() == 1:
+            elif atoLevel == 1:
                 #print("Test2")
                 if not self.needsWater:
                     self.warning = 'ato res needs water'
@@ -133,21 +136,6 @@ class atoSystem:
         self.atoStatus=Label(frame,text="{0}".format(self.opperationalStatus),fg=fgC,bg=bgC,justify=LEFT)
         self.atoStatus.grid(row=1,column=1)
 
-        sumpLevelLabel = Label(frame,text="sump level status: ",fg=fgC,bg=bgC,justify=RIGHT)
-        sumpLevelLabel.grid(row=2,column=0)
-        self.sumpLevelStatus=Label(frame,text="{0}".format(self.sumpwaterLevelSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
-        self.sumpLevelStatus.grid(row=2,column=1)
-
-        atoResLabel = Label(frame,text="Ato res needs filled: ",fg=fgC,bg=bgC,justify=RIGHT)
-        atoResLabel.grid(row=3,column=0)
-        self.atoResStatus=Label(frame,text="{0}".format(self.atoResSensor.getLevel()),fg=fgC,bg=bgC,justify=LEFT)
-        self.atoResStatus.grid(row=3,column=1)
-
-        atoPumpLabel = Label(frame,text="Ato pump status: ",fg=fgC,bg=bgC,justify=RIGHT)
-        atoPumpLabel.grid(row=4,column=0)
-        self.atoPumpStatus=Label(frame,text="{0}".format(self.atoPump.status),fg=fgC,bg=bgC,justify=LEFT)
-        self.atoPumpStatus.grid(row=4,column=1)
-
         systemOnButton = Button(frame,text="System On",bg=bgC,fg=fgC,width=buttonWidth,command=lambda: self.on())
         systemOnButton.grid(row=5,column=0)
 
@@ -170,11 +158,6 @@ class atoSystem:
     
     def updateGui(self):
         self.atoStatus.config(text="{0}".format(self.opperationalStatus))
-        self.sumpLevelStatus.config(text="{0}".format(self.sumpwaterLevelSensor.getLevel()))
-        self.atoResStatus.config(text="{0}".format(self.atoResSensor.getLevel()))
-        self.atoPumpStatus.config(text="{0}".format(self.atoPump.status))
-
-
 
         
 

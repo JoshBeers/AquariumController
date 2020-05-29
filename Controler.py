@@ -17,7 +17,7 @@ import pump,floatSensor, sensorCheckor
         tempuature sensor at gpio4
         tank level sensor at gpio14
             when tank is overfull returns false
-        sump level sensor at gpio15
+        sump level sensor at gpio23
             when sump is full false
         ato sensor at gpio18
             when res is full returns true
@@ -43,7 +43,7 @@ tankPumps = pump.pump([1381717,1381716])
 atoPump = pump.pump([1397077,1397076])
 
 tankFloatSensor = floatSensor.floatSensor(27)
-sumpFloatSensor = floatSensor.floatSensor(22)
+sumpFloatSensor = floatSensor.floatSensor(23)
 atoFloatSensor = floatSensor.floatSensor(2)
 
 
@@ -55,7 +55,7 @@ atoFloatSensor = floatSensor.floatSensor(2)
 root=Tk()
 root.geometry('1000x800')
 colors=["grey","black","black"]
-panelSize=[300,400]
+panelSize=[300,220]
 root.config(bg=colors[0])
 
 
@@ -67,7 +67,7 @@ pumps=pumpController.pumpController(root,colors,panelSize,emails,logger,tankPump
 heating=temperatureControl.temperatureControl(78,root,colors,panelSize,emails,logger) #add locations
 ato = ato.atoSystem(root,colors,panelSize,emails,logger,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
-sensorChecker = sensorChecker.sensorChecker(root,colors,panelSize,tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
+sensorChecker = sensorCheckor.sensorCheckor(root,colors,panelSize,tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
 
 
 # saved in order temp setting, left light, right light, sump light
@@ -77,6 +77,7 @@ def on_closing():
     saveUtility.saveItems(heating.getTankTempSetting(),"[]","[]","[]")
     pumps.Off()
     ato.Off()
+    sensorChecker.stop()
     #lights.Off()
     #heating.End()
     root.destroy()

@@ -2,6 +2,8 @@ import pump
 import floatSensor
 import time
 from threading import Thread
+from tkinter import * 
+
 
 class sensorCheckor:
 
@@ -21,34 +23,43 @@ class sensorCheckor:
         self.fgC=GUIcolors[1]
         self.bdC=GUIcolors[2]
         self.frame=Frame()
-        self.settupGUI()
+        self.setupGUI()
+        self.opporationalStatus = False
 
         #need to setup run method
+        self.t=Thread()
+        self.t.start()
+        self.t.join()
+        
         self.t=Thread(target=self.run)
         self.t.start()
-        self.opporationalStatus = False
+        
 
     def stop(self):
         self.opporationalStatus = False
+        self.updateGUI()
+    
 
 
 
     def run(self):
         self.opporationalStatus = True
-        while( self.opporationalStatus = True):
+        while( self.opporationalStatus):
             self.tankFloatSensor.getLevel()
             self.sumpFloatSensor.getLevel()
             self.atoFloatSensor.getLevel()
             self.updateGUI()
+            #print(self.opporationalStatus)
+            time.sleep(.1)
 
     def updateGUI(self):
         self.mPS.config(text="{0}".format(self.tankPumps.status))
         self.tankPumpLock.config(text="{0}".format(self.tankPumps.lock))
         self.atoPumpStatus.config(text="{0}".format(self.atoPump.status))
         self.atoPumpLock.config(text="{0}".format(self.atoPump.lock))
-        self.tankFloatSensorStatus.config(text="{0}".format(self.tankFloatSensor.level))
-        self.sumpFloatSensorStatus.config(text="{0}".format(self.sumpFloatSensor.level))
-        self.atoFloarSensorStatus.config(text="{0}".format(self.atoFloatSensor.level))
+        self.tankFloatSensorStatus.config(text="{0}".format(self.tankFloatSensor.level == 0))
+        self.sumpFloatSensorStatus.config(text="{0}".format(self.sumpFloatSensor.level == 1))
+        self.atoFloarSensorStatus.config(text="{0}".format(self.atoFloatSensor.level == 0))
 
 
 
@@ -56,7 +67,7 @@ class sensorCheckor:
 
 
 
-    def setupUI(self):
+    def setupGUI(self):
         root=self.root
         frame=self.frame
         bgC=self.bgC
@@ -64,7 +75,7 @@ class sensorCheckor:
         bdC=self.bdC
         frame=Frame(root,width=self.pX,heigh=self.pY,highlightbackground=bdC,highlightthickness=1,bg=bgC)
         frame.grid_propagate(0)
-        frame.grid(row=1,column=0)
+        frame.grid(row=0,column=2)
 
         mainLabel=Label(frame,text="System equipment",fg=fgC,bg=bgC)
         mainLabel.grid(row=0,columnspan=3)
@@ -97,15 +108,15 @@ class sensorCheckor:
 
         tankFloatSensorLable=Label(frame,text="Tank float sensor Status: ",fg=fgC,bg=bgC,justify=RIGHT)
         tankFloatSensorLable.grid(row=7,column=0)
-        self.tankFloatSensorStatus=Label(frame,text="{0}".format(self.tankFloatSensor.level),fg=fgC,bg=bgC,justify=LEFT)
+        self.tankFloatSensorStatus=Label(frame,text="{0}".format(self.tankFloatSensor.level == 0),fg=fgC,bg=bgC,justify=LEFT)
         self.tankFloatSensorStatus.grid(row=7,column=1)
 
         sumpFloatSensorLabel=Label(frame,text="Sump float sensor Status: ",fg=fgC,bg=bgC,justify=RIGHT)
         sumpFloatSensorLabel.grid(row=8,column=0)
-        self.sumpFloatSensorStatus=Label(frame,text="{0}".format(self.sumpFloatSensor.level),fg=fgC,bg=bgC,justify=LEFT)
+        self.sumpFloatSensorStatus=Label(frame,text="{0}".format(self.sumpFloatSensor.level == 1),fg=fgC,bg=bgC,justify=LEFT)
         self.sumpFloatSensorStatus.grid(row=8,column=1)
 
         atoFloarSensorLabel=Label(frame,text="ato float sensor Status: ",fg=fgC,bg=bgC,justify=RIGHT)
         atoFloarSensorLabel.grid(row=9,column=0)
-        self.atoFloarSensorStatus=Label(frame,text="{0}".format(self.atoFloatSensor.level),fg=fgC,bg=bgC,justify=LEFT)
+        self.atoFloarSensorStatus=Label(frame,text="{0}".format(self.atoFloatSensor.level ==0),fg=fgC,bg=bgC,justify=LEFT)
         self.atoFloarSensorStatus.grid(row=9,column=1)

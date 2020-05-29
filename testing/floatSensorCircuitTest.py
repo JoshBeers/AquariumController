@@ -14,9 +14,12 @@ gpio.cleanup()
 gpio.setmode(gpio.BCM)
 gpio.setup(2,gpio.IN)
 gpio.setup(27,gpio.IN)
-gpio.setup(22,gpio.IN)
+gpio.setup(23,gpio.IN)
+
+t =0 
 
 while True:
-    print("ato: ",gpio.input(2)," tank: ",gpio.input(27),"  sump sensor ",gpio.input(22))
+    print("ato: ",gpio.input(2)," tank: ",gpio.input(27),"  sump sensor ",gpio.input(23),'  ',t)
     time.sleep(1)
+    t+=1
 
