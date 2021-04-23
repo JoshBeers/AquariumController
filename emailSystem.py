@@ -3,8 +3,8 @@ import smtplib, ssl
 class emailSystem:
     def __init__(self):
         self.port=587
-        self.to='joshbeers999@gmail.com'
-        self.fro='maintankwarnings@gmail.com'
+        self.to=''
+        self.fro=''
         self.context=ssl.create_default_context()
         
 
@@ -19,9 +19,5 @@ class emailSystem:
             print('email error')
         server.quit()
 
-'''
-    email used:
-    maintankwarnings@gmail.com
-    Tanl123?Warn
-'''
+
 
