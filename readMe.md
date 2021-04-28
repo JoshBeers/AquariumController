@@ -4,3 +4,5 @@ This program is a native app built using python 2.7 and is designed to run off a
 Currently the app monitors the water level in the display, sump, and automating top off reservoir and the tank temperatures. 
 The application controlls the heater, main pump, and auto top off pump.
 
+If you want to test program you can test as is on a rasberry pi or alter files to remove GPIO usages. 
+
