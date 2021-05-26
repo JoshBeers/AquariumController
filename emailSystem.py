@@ -13,7 +13,7 @@ class emailSystem:
         server=smtplib.SMTP('smtp.gmail.com',self.port)
         server.starttls(context=self.context)
         try:
-            server.login(self.fro,'Tank123?Warn')
+            server.login(self.fro,'')
             server.sendmail(self.fro,self.to,message)
         except:
             print('email error')
