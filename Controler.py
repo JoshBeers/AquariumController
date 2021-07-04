@@ -1,14 +1,12 @@
 from threading import Thread
 from tkinter import * 
 import pumpController
-#import tankLigthControler
 import temperatureControl
-import signal
 import emailSystem
 import settingSaver
 import atoSystem as ato
-import logger
-import pump,floatSensor, sensorCheckor
+import sensorCheckor
+from equipment import pump,floatSensor
 
 
 '''
@@ -48,6 +46,7 @@ atoFloatSensor = floatSensor.floatSensor(2)
 
 
 
+
 #GPIO.setmode(GPIO.BCM)
 #GPIO.setup(21,GPIO.OUT)
 
@@ -59,15 +58,13 @@ panelSize=[300,220]
 root.config(bg=colors[0])
 
 
-#objects
-logger = logger.Logger()
-emails=emailSystem.emailSystem()
-pumps=pumpController.pumpController(root,colors,panelSize,emails,logger,tankPumps,tankFloatSensor,sumpFloatSensor,atoFloatSensor)  #ad DNC loactions
-#lights=tankLigthControler.lightControler(root,colors,panelSize)  #add locations
-heating=temperatureControl.temperatureControl(78,root,colors,panelSize,emails,logger) #add locations
-ato = ato.atoSystem(root,colors,panelSize,emails,logger,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
+
+emails= emailSystem.emailSystem()
+pumps= pumpController.pumpController(emails,tankPumps,tankFloatSensor,sumpFloatSensor,atoFloatSensor)  #ad DNC loactions
+heating= temperatureControl.temperatureControl(78,emails) #add locations
+ato= ato.atoSystem(emails,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
-sensorChecker = sensorCheckor.sensorCheckor(root,colors,panelSize,tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
+sensorChecker = sensorCheckor.sensorCheckor(tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
 
 
 # saved in order temp setting, left light, right light, sump light
