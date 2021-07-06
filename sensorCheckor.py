@@ -13,6 +13,8 @@ class sensorCheckor:
         self.sumpFloatSensor = sumpFloatSensor
         self.atoFloatSensor = atoFloarSensor
 
+        self.callback = self.fakeCallback
+
         self.tankPumps = tankPumps
         self.atoPump = atoPump
 
@@ -28,15 +30,21 @@ class sensorCheckor:
 
     def stop(self):
         self.opporationalStatus = False
+        self.callback()
+
+    def fakeCallback(self):
+        pass
     
 
 
 
     def run(self):
         self.opporationalStatus = True
+        self.callback()
         while( self.opporationalStatus):
             self.tankFloatSensor.getLevel()
             self.sumpFloatSensor.getLevel()
             self.atoFloatSensor.getLevel()
             #print(self.opporationalStatus)
+            self.callback()
             time.sleep(.1)

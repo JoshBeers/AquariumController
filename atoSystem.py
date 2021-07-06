@@ -14,8 +14,9 @@ class atoSystem:
         self.atoPump=pumpFrequency
         self.sumpwaterLevelSensor = sumpwaterLevelSensor
         self.atoResSensor = atoResSensor
+        self.operationalStatus=False
 
-        self.opperationalStatus=False
+        self.callback  = self.fakeCallback
 
         self.warning = ""
         self.needsWater = False
@@ -31,22 +32,26 @@ class atoSystem:
         self.t=Thread(target=self.run)
         self.t.start()
         self.log('system started')
+        self.callback()
     
 
     def Off(self):
-        self.opperationalStatus=False
+        self.operationalStatus=False
         self.atoPump.lock=False
         self.atoPump.Off()
         self.log('system stopped')
+        self.callback()
 
 
     def atoPumpOnFromUser(self,newStatus):
         self.atoPump.userAction(newStatus)
         self.log('pump {} from user'.format(newStatus))
+        self.callback()
     
     def Noramlize(self):
         self.atoPump.normalize()
         self.log('pump normalized')
+        self.callback()
 
         
 
@@ -58,15 +63,19 @@ class atoSystem:
 
     def log(self,message= '',warning=''):
         pass
-        #self.logger.ato(self.opperationalStatus,self.sumpwaterLevelSensor.getLevel(),self.atoResSensor.getLevel(),message,warning)
+        #self.logger.ato(self.operationalStatus,self.sumpwaterLevelSensor.getLevel(),self.atoResSensor.getLevel(),message,warning)
+
+    def fakeCallback():
+        pass
         
 
     def run(self):
         self.atoPump.lock=False
-        self.opperationalStatus=True
+        self.operationalStatus=True
         sleepTime = 1
         tempForPumpOn = 0
-        while self.opperationalStatus:
+        self.callback()
+        while self.operationalStatus:
             #print(self.atoPump.status)
             #if sump level low and res has water
             sumpLevel = self.sumpwaterLevelSensor.level
@@ -91,7 +100,7 @@ class atoSystem:
                     self.log('error in email system')
                 self.needsWater = True
                 self.atoPump.Off()
-                self.opperationalStatus = False
+                self.operationalStatus = False
                 self.log('res too low','res to low')
                 tempForPumpOn = 0
             else:
@@ -100,4 +109,5 @@ class atoSystem:
                 self.log('pump turned off')
                 sleepTime = 10
                 tempForPumpOn = 0
+            self.callback()
             t.sleep(sleepTime)

@@ -1,12 +1,12 @@
 from threading import Thread
-from tkinter import * 
 import pumpController
 import temperatureControl
 import emailSystem
 import settingSaver
-import atoSystem as ato
+import atoSystem as atoo
 import sensorCheckor
 from equipment import pump,floatSensor
+from GUI import GUI
 
 
 '''
@@ -51,22 +51,19 @@ atoFloatSensor = floatSensor.floatSensor(2)
 #GPIO.setup(21,GPIO.OUT)
 
 
-root=Tk()
-root.geometry('1000x800')
-colors=["grey","black","black"]
-panelSize=[300,220]
-root.config(bg=colors[0])
+
 
 
 
 emails= emailSystem.emailSystem()
 pumps= pumpController.pumpController(emails,tankPumps,tankFloatSensor,sumpFloatSensor,atoFloatSensor)  #ad DNC loactions
 heating= temperatureControl.temperatureControl(78,emails) #add locations
-ato= ato.atoSystem(emails,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
+ato= atoo.atoSystem(emails,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
 sensorChecker = sensorCheckor.sensorCheckor(tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
 
 
+allStuff= [pumps,heating,ato,sensorChecker]
 # saved in order temp setting, left light, right light, sump light
 
 
@@ -77,7 +74,6 @@ def on_closing():
     sensorChecker.stop()
     #lights.Off()
     #heating.End()
-    root.destroy()
 
 def opening():
     temp=saveUtility.getSaved()
@@ -86,17 +82,13 @@ def opening():
 
 
 
+#gui stuff
+GUI.GUI(on_closing,allStuff)
 
 
 
 
 
-
-
-
-
-root.protocol("WM_DELETE_WINDOW", on_closing)
-root.mainloop()
 
 
 
