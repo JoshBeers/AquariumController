@@ -7,11 +7,12 @@ import time
 class pump:
 
 
-    def __init__(self,frequencys):
+    def __init__(self,frequencys,callback):
         self.status=False
         self.frequencys=frequencys
         self.lock=False
-        self.cach=False 
+        self.cach=False
+        self.callback = callback
 
 
 
@@ -19,24 +20,29 @@ class pump:
         if not self.lock:
             self.status=True
             self.sendCode(self.frequencys[0])
-            self.cach=True            
+            self.cach=True       
+            self.callback()    
         else:
-            self.cach=True            
+            self.cach=True   
+            
 
     def Off(self):     
         if not self.lock:
             self.status=False
             self.sendCode(self.frequencys[1])
             self.cach=False
+            self.callback()
         else:
             self.cach=False
+
 
     def normalize(self):
         self.lock = False
         if(self.cach):
             self.On()
-            return
-        self.Off()
+        else:
+            self.Off()
+        self.callback() 
 
     def userAction(self, status):
         #print(status)
@@ -44,9 +50,10 @@ class pump:
         if(status):
             self.On()
             self.lock = True
-            return
-        self.Off()
-        self.lock = True
+        else:
+            self.Off()
+            self.lock = True
+        self.callback()
 
     def sendCode(self, code):
         return

@@ -28,10 +28,9 @@ class GUI:
         self.setup()
 
         self.root.protocol("WM_DELETE_WINDOW", self.onClose)
+    
+    def start(self):
         self.root.mainloop()
-
-
-        
 
     def onClose(self):
         self.onClosing()
@@ -43,10 +42,8 @@ class GUI:
         self.setupSensors()
         #pump area
 
-
-
     def pumpFrameSetup(self):
-        self.pumpSystem.callback = self.updatePumps
+        #self.pumpSystem.callback = self.updatePumps
         frame=Frame(self.root,width=panelWidth,heigh=panelHeight,highlightbackground=forgroundColor,highlightthickness=1,bg=backgroundColor)
         frame.grid_propagate(0)
         frame.grid(row=0,column=0)
@@ -180,7 +177,10 @@ class GUI:
         self.sumpFloatSensorStatus.config(text="{0}".format(self.sensors.sumpFloatSensor.level == 1))
         self.atoFloarSensorStatus.config(text="{0}".format(self.sensors.atoFloatSensor.level == 0))
 
-    
+    def update(self):
+        print('gui update')
+        self.updatePumps()
+        
 
 
 

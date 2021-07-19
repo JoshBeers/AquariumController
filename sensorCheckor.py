@@ -42,6 +42,7 @@ class sensorCheckor:
         self.opporationalStatus = True
         self.callback()
         while( self.opporationalStatus):
+         #   print('sensorThread')
             self.tankFloatSensor.getLevel()
             self.sumpFloatSensor.getLevel()
             self.atoFloatSensor.getLevel()

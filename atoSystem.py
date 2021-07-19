@@ -76,7 +76,7 @@ class atoSystem:
         tempForPumpOn = 0
         self.callback()
         while self.operationalStatus:
-            #print(self.atoPump.status)
+           # print('aotThread')
             #if sump level low and res has water
             sumpLevel = self.sumpwaterLevelSensor.level
             atoLevel = self.atoResSensor.level

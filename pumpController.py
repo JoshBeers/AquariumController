@@ -1,9 +1,11 @@
+from asyncio.windows_events import NULL
+from logging import fatal
 import time as t
 from equipment import pump as p
 from equipment import floatSensor as s
 from tkinter import * 
 from threading import Thread
-
+import asyncio
 
 
 
@@ -16,14 +18,14 @@ from threading import Thread
 
 
 class pumpController:
-    def __init__(self,em,pumps,tankWaterLevelSensor,sumpwaterLevelSensor,atoResSensor):
+    def __init__(self,em,pumps,tankWaterLevelSensor,sumpwaterLevelSensor,atoResSensor,callback):
         self.pumps=pumps
         self.operationalStatus=False
         self.tankLevelSensor=tankWaterLevelSensor  # sensor in tank
         self.sumpLevelSensor=sumpwaterLevelSensor # sensor that tells if too little water in resivour\
         self.atoReserveSensor = atoResSensor
 
-        self.callback = self.fakeCallback
+        self.listernMethod = callback
 
 
         self.waterLevelTooLow=False
@@ -34,6 +36,8 @@ class pumpController:
 
         
 #public methods
+    def callback(self):
+        self.listernMethod()
 
     def On(self): 
         self.t=Thread(target=self.run)
@@ -49,32 +53,26 @@ class pumpController:
         self.pumps.Off()
         t.sleep(.1)
         self.pumps.Off()
-        self.callback()
+        
 
     def pumpTurnedOnByUser(self):
         self.pumps.userAction(True)
         self.log('user turned pumps to {}'.format(True))
-        self.callback()
 
 
     def pumpTurnedOffByUser(self):   
         self.pumps.userAction(False)
         self.log('user turned pumps to {}'.format(False))
-        self.callback()
 
     def pumpsNorm(self):
         self.pumps.normalize()
         if(not self.operationalStatus):
             self.pumps.Off()
         self.log('user normalized pumps')
-        print('nrop')
-        self.callback()
+        #print('nrop')
 
 
 # private methods
-
-    def fakeCallback(self):
-        pass
 
     def log(self,mes= '',warning = ''):
         pass
@@ -101,6 +99,7 @@ class pumpController:
         tempForPumpOn = 0
         self.callback()
         while self.operationalStatus:
+           # print('pumpThread')
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
            # print(self.tankLevelSensor.getLevel())
             sumpSensor = self.sumpLevelSensor.level
@@ -127,17 +126,24 @@ class pumpController:
                     self.log('error in email system')
                 self.hasWarning=True
                 self.log('',self.warning)
+                self.callback()
                 #if everything is ok it turns the pumps on
             else:
                 if(tempForPumpOn%10 ==0):
                     self.pumps.On()
+                    self.callback()
                     #print('pumps on from pump Controller')
                 self.pumpsCach=True
                 tempForPumpOn+=1
+                
                 #print("it is on")
-            self.callback()
             t.sleep(1)
 
+
+class f:
+
+    def __init__(self) -> None:
+        pass
 
 
 

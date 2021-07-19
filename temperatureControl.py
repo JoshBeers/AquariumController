@@ -85,6 +85,7 @@ class temperatureControl:
     def main(self):
         lastMin=0
         while self.opperationStatus:
+         #   print('tempThreads')
             t=time.localtime()
             
             temp=self.thermometer.getTemperature()

@@ -1,4 +1,8 @@
+import asyncio
+from asyncio.windows_events import NULL
 from threading import Thread
+
+import websockets
 import pumpController
 import temperatureControl
 import emailSystem
@@ -7,6 +11,10 @@ import atoSystem as atoo
 import sensorCheckor
 from equipment import pump,floatSensor
 from GUI import GUI
+import websocketObj
+from websocketObj import websocketStuff
+
+
 
 
 '''
@@ -35,10 +43,21 @@ from GUI import GUI
 
 '''
 
+
+listeners = set()
+def updateListeners():
+    if listeners:
+        for l in listeners:
+            if isinstance(l, websocketStuff):
+                asyncio.run(l.update())
+            l.update()
+
+
+callback = updateListeners
 #model setup
 
-tankPumps = pump.pump([1381717,1381716])
-atoPump = pump.pump([1397077,1397076])
+tankPumps = pump.pump([1381717,1381716],callback)
+atoPump = pump.pump([1397077,1397076],callback)
 
 tankFloatSensor = floatSensor.floatSensor(27)
 sumpFloatSensor = floatSensor.floatSensor(23)
@@ -47,20 +66,21 @@ atoFloatSensor = floatSensor.floatSensor(2)
 
 
 
+
+
 #GPIO.setmode(GPIO.BCM)
 #GPIO.setup(21,GPIO.OUT)
 
 
-
-
-
-
 emails= emailSystem.emailSystem()
-pumps= pumpController.pumpController(emails,tankPumps,tankFloatSensor,sumpFloatSensor,atoFloatSensor)  #ad DNC loactions
+pumps= pumpController.pumpController(emails,tankPumps,tankFloatSensor,sumpFloatSensor,atoFloatSensor, callback)  #ad DNC loactions
 heating= temperatureControl.temperatureControl(78,emails) #add locations
 ato= atoo.atoSystem(emails,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
 sensorChecker = sensorCheckor.sensorCheckor(tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
+
+
+
 
 
 allStuff= [pumps,heating,ato,sensorChecker]
@@ -72,6 +92,9 @@ def on_closing():
     pumps.Off()
     ato.Off()
     sensorChecker.stop()
+    heating.End()
+
+    
     #lights.Off()
     #heating.End()
 
@@ -82,8 +105,40 @@ def opening():
 
 
 
+
+
+
+websocket = websocketObj.websocketStuff(allStuff)
+listeners.add(websocket)
+
+
+
+allStuff.append(websocket)
+
+
+
 #gui stuff
-GUI.GUI(on_closing,allStuff)
+
+
+def startRest():
+    gui = GUI.GUI(on_closing,allStuff)
+   # listeners.add(gui)
+    opening()
+    gui.start()
+    
+
+guiThread= Thread(target= startRest)
+guiThread.start()
+websocket.start()
+
+
+
+
+
+
+
+
+
 
 
 
