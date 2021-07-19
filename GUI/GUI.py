@@ -80,7 +80,7 @@ class GUI:
         self.pumpSystemState.config(text="{0}".format(self.pumpSystem.operationalStatus))
     
     def setupATO(self):
-        self.atoSystem.callback  = self.updateATO
+        #self.atoSystem.callback  = self.updateATO
         bgC=backgroundColor
         fgC=forgroundColor
         buttonWidth=13
@@ -116,7 +116,7 @@ class GUI:
         self.atoStatus.config(text="{0}".format(self.atoSystem.operationalStatus))
 
     def setupSensors(self):
-        self.sensors.callback = self.updateSensors
+       # self.sensors.callback = self.updateSensors
         bgC=backgroundColor
         fgC=forgroundColor
         bdC=forgroundColor
@@ -180,6 +180,8 @@ class GUI:
     def update(self):
         print('gui update')
         self.updatePumps()
+        self.updateATO()
+        self.updateSensors()
         
 
 

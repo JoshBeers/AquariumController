@@ -9,14 +9,14 @@ from threading import Thread
 
 class atoSystem:
 
-    def __init__(self,emailSystem,pumpFrequency,sumpwaterLevelSensor,atoResSensor):
+    def __init__(self,emailSystem,pumpFrequency,sumpwaterLevelSensor,atoResSensor,callback):
 
         self.atoPump=pumpFrequency
         self.sumpwaterLevelSensor = sumpwaterLevelSensor
         self.atoResSensor = atoResSensor
         self.operationalStatus=False
 
-        self.callback  = self.fakeCallback
+        self.callback  = callback
 
         self.warning = ""
         self.needsWater = False
@@ -32,7 +32,7 @@ class atoSystem:
         self.t=Thread(target=self.run)
         self.t.start()
         self.log('system started')
-        self.callback()
+
     
 
     def Off(self):
@@ -40,13 +40,13 @@ class atoSystem:
         self.atoPump.lock=False
         self.atoPump.Off()
         self.log('system stopped')
-        self.callback()
+        
 
 
     def atoPumpOnFromUser(self,newStatus):
         self.atoPump.userAction(newStatus)
         self.log('pump {} from user'.format(newStatus))
-        self.callback()
+        
     
     def Noramlize(self):
         self.atoPump.normalize()
@@ -65,9 +65,7 @@ class atoSystem:
         pass
         #self.logger.ato(self.operationalStatus,self.sumpwaterLevelSensor.getLevel(),self.atoResSensor.getLevel(),message,warning)
 
-    def fakeCallback():
-        pass
-        
+
 
     def run(self):
         self.atoPump.lock=False
@@ -89,6 +87,7 @@ class atoSystem:
                 sleepTime = .1
                 tempForPumpOn = tempForPumpOn+1
                 #print("Test1")
+
             #if res needs refilled
             elif atoLevel == 1:
                 #print("Test2")
@@ -103,11 +102,11 @@ class atoSystem:
                 self.operationalStatus = False
                 self.log('res too low','res to low')
                 tempForPumpOn = 0
+                self.callback()
             else:
                 #print("Test3")
                 self.atoPump.Off()
                 self.log('pump turned off')
                 sleepTime = 10
                 tempForPumpOn = 0
-            self.callback()
             t.sleep(sleepTime)

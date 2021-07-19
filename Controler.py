@@ -50,7 +50,8 @@ def updateListeners():
         for l in listeners:
             if isinstance(l, websocketStuff):
                 asyncio.run(l.update())
-            l.update()
+            else:    
+                l.update()
 
 
 callback = updateListeners
@@ -59,9 +60,9 @@ callback = updateListeners
 tankPumps = pump.pump([1381717,1381716],callback)
 atoPump = pump.pump([1397077,1397076],callback)
 
-tankFloatSensor = floatSensor.floatSensor(27)
-sumpFloatSensor = floatSensor.floatSensor(23)
-atoFloatSensor = floatSensor.floatSensor(2)
+tankFloatSensor = floatSensor.floatSensor(27, callback)
+sumpFloatSensor = floatSensor.floatSensor(23,callback)
+atoFloatSensor = floatSensor.floatSensor(2,callback)
 
 
 
@@ -74,8 +75,8 @@ atoFloatSensor = floatSensor.floatSensor(2)
 
 emails= emailSystem.emailSystem()
 pumps= pumpController.pumpController(emails,tankPumps,tankFloatSensor,sumpFloatSensor,atoFloatSensor, callback)  #ad DNC loactions
-heating= temperatureControl.temperatureControl(78,emails) #add locations
-ato= atoo.atoSystem(emails,atoPump,sumpFloatSensor,atoFloatSensor) #add locations
+heating= temperatureControl.temperatureControl(78,emails,22 , callback) #add locations
+ato= atoo.atoSystem(emails,atoPump,sumpFloatSensor,atoFloatSensor,callback) #add locations
 saveUtility=settingSaver.settingSaver("saves/saved.txt") 
 sensorChecker = sensorCheckor.sensorCheckor(tankPumps,atoPump,tankFloatSensor,sumpFloatSensor,atoFloatSensor)
 
@@ -122,7 +123,7 @@ allStuff.append(websocket)
 
 def startRest():
     gui = GUI.GUI(on_closing,allStuff)
-   # listeners.add(gui)
+    listeners.add(gui)
     opening()
     gui.start()
     

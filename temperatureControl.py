@@ -7,11 +7,12 @@ import os
 import errno
 
 
+
 class temperatureControl:
 
-    def __init__(self,tempSet,em,heaterLoaction=22):
-        self.heater=h.heater(heaterLoaction)
-        self.thermometer=te.thermometer()
+    def __init__(self,tempSet,em,heaterLoaction, callback):
+        self.heater=h.heater(heaterLoaction,callback)
+        self.thermometer=te.thermometer(callback)
         self.temperatureSetting=tempSet
         self.opperationStatus=True
         self.heaterLock=False
