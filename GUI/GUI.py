@@ -29,7 +29,7 @@ class GUI:
 
         self.root.protocol("WM_DELETE_WINDOW", self.onClose)
     
-    def start(self):
+    async def start(self):
         self.root.mainloop()
 
     def onClose(self):
@@ -178,7 +178,7 @@ class GUI:
         self.atoFloarSensorStatus.config(text="{0}".format(self.sensors.atoFloatSensor.level == 0))
 
     def update(self):
-        print('gui update')
+        #print('gui update')
         self.updatePumps()
         self.updateATO()
         self.updateSensors()

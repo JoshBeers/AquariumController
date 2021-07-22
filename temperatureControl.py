@@ -5,6 +5,8 @@ from tkinter import *
 from equipment import thermometer as te
 import os
 import errno
+import asyncio
+
 
 
 
@@ -31,9 +33,16 @@ class temperatureControl:
     def On(self):
         self.opperationStatus=True
         self.heaterLock=False
-        self.thread=Thread(target=self.main)
+        self.thread=Thread(target=self.start, name = 'Temp Thread')
         self.thread.start()
         self.log('system turned on')
+
+    def start(self):
+        print('tet1')
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(self.run())
+        print('tet2')
 
     def End(self):
         self.opperationStatus=False
@@ -83,7 +92,7 @@ class temperatureControl:
         pass
 
     
-    def main(self):
+    async def run(self):
         lastMin=0
         while self.opperationStatus:
          #   print('tempThreads')

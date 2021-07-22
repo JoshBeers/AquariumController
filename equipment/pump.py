@@ -21,7 +21,7 @@ class pump:
             self.status=True
             self.sendCode(self.frequencys[0])
             self.cach=True       
-            self.callback()    
+            #self.callback()    
         else:
             self.cach=True   
             
@@ -31,7 +31,7 @@ class pump:
             self.status=False
             self.sendCode(self.frequencys[1])
             self.cach=False
-            self.callback()
+            #self.callback()
         else:
             self.cach=False
 
@@ -42,7 +42,7 @@ class pump:
             self.On()
         else:
             self.Off()
-        self.callback() 
+        #self.callback() 
 
     def userAction(self, status):
         #print(status)
@@ -53,7 +53,7 @@ class pump:
         else:
             self.Off()
             self.lock = True
-        self.callback()
+        #self.callback()
 
     def sendCode(self, code):
         return

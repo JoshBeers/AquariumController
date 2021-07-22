@@ -1,3 +1,4 @@
+from asyncio.events import set_event_loop
 from asyncio.windows_events import NULL
 from logging import fatal
 import time as t
@@ -32,6 +33,7 @@ class pumpController:
         self.warning='none'
         self.hasWarning=False
 
+        
         self.On()
 
         
@@ -40,9 +42,14 @@ class pumpController:
         self.listernMethod()
 
     def On(self): 
-        self.t=Thread(target=self.run)
-        self.t.start()
-        self.callback()
+       self.t=Thread(target=self.start, name='pumpSystem')
+       self.t.start()
+
+    def start(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(self.run())
+
         
 
     def Off(self):
@@ -53,23 +60,53 @@ class pumpController:
         self.pumps.Off()
         t.sleep(.1)
         self.pumps.Off()
-        
+        self.callback()    
 
     def pumpTurnedOnByUser(self):
         self.pumps.userAction(True)
         self.log('user turned pumps to {}'.format(True))
+        self.callback()
 
 
     def pumpTurnedOffByUser(self):   
         self.pumps.userAction(False)
         self.log('user turned pumps to {}'.format(False))
+        self.callback()
 
     def pumpsNorm(self):
         self.pumps.normalize()
         if(not self.operationalStatus):
             self.pumps.Off()
         self.log('user normalized pumps')
+        self.callback()
         #print('nrop')
+
+    # method toggles the pump
+    # used by websocket
+    def togglePump(self):
+        if(self.pumps.status):
+            self.pumpTurnedOffByUser()
+        else:
+            self.pumpTurnedOnByUser()
+        self.callback()
+
+    #method is used by websocket to toggle the pumps user lock 
+    #it will normalize pump if it is locked 
+    #it will lock the pump if it isnt locked
+    def togglePumpLock(self):
+        if(self.pumps.lock):
+            self.pumpsNorm()
+        else:
+            self.pumps.lock = True
+            self.callback()
+
+    # method toggles the system on and off
+    #used by websocket
+    def toggleSystem(self):
+        if(self.operationalStatus):
+            self.Off()
+        else:
+            self.On()
 
 
 # private methods
@@ -88,7 +125,7 @@ class pumpController:
             if user controls pump it is locked till normalized
     '''
 
-    def run(self):
+    async def run(self):
         self.hasWarning=True
         self.warning='none'
         #self.pumps.normalize()
@@ -99,7 +136,7 @@ class pumpController:
         tempForPumpOn = 0
         self.callback()
         while self.operationalStatus:
-           # print('pumpThread')
+            #print('pumpThread')
             #checks the sump and ato res if bad turn off system and locks pumps off  or if the tank is over full
            # print(self.tankLevelSensor.getLevel())
             sumpSensor = self.sumpLevelSensor.level
@@ -129,12 +166,18 @@ class pumpController:
                 self.callback()
                 #if everything is ok it turns the pumps on
             else:
+
+                '''
                 if(tempForPumpOn%10 ==0):
                     self.pumps.On()
                     self.callback()
                     #print('pumps on from pump Controller')
                 self.pumpsCach=True
                 tempForPumpOn+=1
+                '''
+                if not self.pumps.status and not self.pumps.lock:
+                    self.pumps.On()
+                    self.callback()
                 
                 #print("it is on")
             t.sleep(1)

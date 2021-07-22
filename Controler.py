@@ -14,6 +14,8 @@ from GUI import GUI
 import websocketObj
 from websocketObj import websocketStuff
 
+import nest_asyncio
+nest_asyncio.apply()
 
 
 
@@ -37,10 +39,6 @@ from websocketObj import websocketStuff
         1.1 |1381717|1381716
         1.2 |1394005|1394005
         1.3 |1397077|1397076
-
-
-        
-
 '''
 
 
@@ -49,6 +47,7 @@ def updateListeners():
     if listeners:
         for l in listeners:
             if isinstance(l, websocketStuff):
+                print('update from controler')
                 asyncio.run(l.update())
             else:    
                 l.update()
@@ -94,6 +93,7 @@ def on_closing():
     ato.Off()
     sensorChecker.stop()
     heating.End()
+    asyncio.run(websocket.close())
 
     
     #lights.Off()
@@ -122,13 +122,17 @@ allStuff.append(websocket)
 
 
 def startRest():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     gui = GUI.GUI(on_closing,allStuff)
     listeners.add(gui)
     opening()
-    gui.start()
+    loop.run_until_complete(gui.start())
     
 
-guiThread= Thread(target= startRest)
+    
+
+guiThread= Thread(target= startRest, name='gui')
 guiThread.start()
 websocket.start()
 
