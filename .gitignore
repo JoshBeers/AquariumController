@@ -1,6 +1,1 @@
-secrets.*
-
-/secrets/
-secrets/
-
-login.txt
+secrets.py
