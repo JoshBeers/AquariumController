@@ -1,6 +1,7 @@
 import asyncio
 from asyncio.windows_events import NULL
 from threading import Thread
+import threading
 
 import websockets
 import pumpController
@@ -13,6 +14,7 @@ from equipment import pump,floatSensor
 from GUI import GUI
 import websocketObj
 from websocketObj import websocketStuff
+import sys
 
 import nest_asyncio
 nest_asyncio.apply()
@@ -95,6 +97,7 @@ def on_closing():
     heating.End()
     asyncio.run(websocket.close())
 
+
     
     #lights.Off()
     #heating.End()
@@ -132,9 +135,12 @@ def startRest():
 
     
 
-guiThread= Thread(target= startRest, name='gui')
+guiThread= Thread(target= startRest, name='gui',daemon=True)
+
 guiThread.start()
 websocket.start()
+
+
 
 
 

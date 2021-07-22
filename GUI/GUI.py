@@ -35,6 +35,7 @@ class GUI:
     def onClose(self):
         self.onClosing()
         self.root.destroy()
+        print('gui destroy')
 
     def setup(self):
         self.pumpFrameSetup()

@@ -42,13 +42,14 @@ class pumpController:
         self.listernMethod()
 
     def On(self): 
-       self.t=Thread(target=self.start, name='pumpSystem')
+       self.t=Thread(target=self.start, name='pumpSystem',daemon=True)
        self.t.start()
 
     def start(self):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.run())
+        print('pumps ended')
 
         
 

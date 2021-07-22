@@ -26,7 +26,7 @@ class sensorCheckor:
         self.t.start()
         self.t.join()
         
-        self.t=Thread(target=self.start, name = 'Sensor Thread')
+        self.t=Thread(target=self.start, name = 'Sensor Thread',daemon=True)
         self.t.start()
         
 
@@ -42,7 +42,7 @@ class sensorCheckor:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.run())
-        print('tet2')
+        print('sensors ended')
     
 
 

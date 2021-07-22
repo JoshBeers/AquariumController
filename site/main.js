@@ -10,6 +10,7 @@ socket.addEventListener('open', function(event){
 });
 
 //receives data from server
+//parses json and sends to setData Method
 socket.addEventListener('message', function(event) {
     console.log(JSON.parse(event.data));
     setData(JSON.parse(event.data));
@@ -17,6 +18,7 @@ socket.addEventListener('message', function(event) {
 
 
 //updates page with new data
+//updates all data at once
 const setData = (data) => {
 
     //get all html elements
@@ -62,44 +64,66 @@ const setData = (data) => {
     toggleButtons(true)
 }
 
+//used by the toggle button for main pump system
 function toggleMainPump(){
     socket.send('toggleMainPump')
-    toggleButtons(false);
+    disablePumpButtons();
 }
 
+//used by the toggle button for main pump
 function toggleMainPumpLock(){
     socket.send('toggleMainPumpLock')
-    toggleButtons(false);
+    disablePumpButtons();
 }
 
+//used by the toggle button for main pump Lock
 function togglePumpSystem(){
     socket.send('togglePumpSystem')
-    toggleButtons(false);
+    disablePumpButtons();
 }
-
+//used by the toggle button for ATO system
 function toggleATOSystem(){
     socket.send('toggleATOSystem')
-    toggleButtons(false);
+    disableAtoButtons();
 }
 
+//used by the toggle button for ATO pump 
 function toggleATOPump(){
     socket.send('toggleATOPump')
-    toggleButtons(false);
+    disableAtoButtons();
 }
 
+//used by the toggle button for ATO pump Lock
 function toggleATOPumpLock(){
     socket.send('toggleATOPumpLock')
-    toggleButtons(false);
+    disableAtoButtons();
 }
 
+//used to disable or enable all class toggle buttons
 function toggleButtons(tog){
-    
     buttons = document.getElementsByClassName('toggle');
-    console.log(buttons);
+
     for(var x =0;x <buttons.length; x++){
-       // buttons[x].disabled = !tog;
+        buttons[x].disabled = !tog;
     }
 }
 
+//used to disable buttons of class pumpButton
+function disablePumpButtons(){
+    buttons = document.getElementsByClassName('pumpButton');
+
+    for(var x =0;x <buttons.length; x++){
+        buttons[x].disabled = !tog;
+    }
+}
+
+//used to disable buttons of class atoButton
+function disableAtoButtons(){
+    buttons = document.getElementsByClassName('atoButton');
+
+    for(var x =0;x <buttons.length; x++){
+        buttons[x].disabled = !tog;
+    }
+}
 
 

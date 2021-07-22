@@ -30,7 +30,7 @@ class atoSystem:
 
 
     def on(self) :
-        self.t=Thread(target=self.start, name = 'ATO Thread')
+        self.t=Thread(target=self.start, name = 'ATO Thread',daemon=True)
         self.t.start()
 
 
@@ -39,7 +39,7 @@ class atoSystem:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self.run())
-        print('tet2')
+        print('ato ended')
 
     def Off(self):
         self.operationalStatus=False

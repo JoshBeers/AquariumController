@@ -64,6 +64,7 @@ class websocketStuff:
 
     async def close(self):
         asyncio.get_event_loop().stop()
+        print('websocket close')
 
     def receiveCommand(self,message):
         print(message)
