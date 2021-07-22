@@ -1,10 +1,13 @@
+import secrets
 import threading
+from asyncio.exceptions import SendfileNotAvailableError
 import websockets
 import logging
 from websockets import WebSocketServerProtocol 
 import asyncio
 from threading import Thread
 import json
+from secrets import checkUserNameAndPassword
 
 
 
@@ -65,43 +68,11 @@ class websocketStuff:
     async def close(self):
         asyncio.get_event_loop().stop()
         print('websocket close')
-
-    def receiveCommand(self,message):
-        print(message)
-        thread = Thread(target= self.rC(message))
-        thread.run()
-        
-
-    def rC(self,message):
-
-        #for the webiste toggle main pump button
-        if(message == 'toggleMainPump'):
-            self.pumpSystem.togglePump()
-
-        #for the website toggle main pump lock button 
-        elif(message == 'toggleMainPumpLock'):
-            self.pumpSystem.togglePumpLock()
-
-        #for the website toggle pump system button
-        elif(message == 'togglePumpSystem'):
-            self.pumpSystem.toggleSystem()
-
-        #for the website toggle ato system button
-        elif(message == 'toggleATOSystem'):
-            self.ato.toggleSystem()
-
-        #for the website toggle ato pump button
-        elif(message == 'toggleATOPump'):
-            self.ato.togglePump()
-
-        #for the website toggle ato pump lock button
-        elif(message == 'toggleATOPumpLock'):
-            self.ato.togglePumpLock()
-
     
 
 class Server:
     clients = set()
+    auhed = set()
 
     def __init__(self,stuff, obj):
         self.pumpSystem = stuff[0]
@@ -141,6 +112,7 @@ class Server:
 
     async def unregister(self, ws: WebSocketServerProtocol) -> None:
         self.clients.remove(ws)
+        self.auhed.discard(ws)
         logging.info(f'{ws.remote_address} disconnected')
 
     async def updateClients(self, message:str) -> None:
@@ -156,15 +128,61 @@ class Server:
     
     async def distribute(self,  ws:WebSocketServerProtocol) -> None:
         async for message in ws: 
-            self.obj.receiveCommand(message)
-        
-    
-    async def update(self):
-        print('test update')
-        #self.updateClients('test Update')
+            await self.receiveCommand(message,ws)
 
-    
+
+
+
+    async def receiveCommand(self,message,ws):
+        print(message)
+        thread = Thread(target= await self.rC(message,ws))
+        thread.run()
         
+
+    async def rC(self,message,ws):
+
+        if(message.split(':')[0] == 'auth'):
+
+            #makes sure that username and password exist and if not returns
+            if(len(message.split(':')[1].split(','))!=2):
+                await self.updateClients('401')
+                return
+            
+            
+            if checkUserNameAndPassword( message.split(':')[1].split(',')[0] ,    message.split(':')[1].split(',')[1]):
+                self.auhed.add(ws)
+                await self.updateClients('authed')
+
+        if ws in self.auhed:
+            #for the webiste toggle main pump button
+            if(message == 'toggleMainPump'):
+                self.pumpSystem.togglePump()
+
+            #for the website toggle main pump lock button 
+            elif(message == 'toggleMainPumpLock'):
+                self.pumpSystem.togglePumpLock()
+
+            #for the website toggle pump system button
+            elif(message == 'togglePumpSystem'):
+                self.pumpSystem.toggleSystem()
+
+            #for the website toggle ato system button
+            elif(message == 'toggleATOSystem'):
+                self.ato.toggleSystem()
+
+            #for the website toggle ato pump button
+            elif(message == 'toggleATOPump'):
+                self.ato.togglePump()
+
+            #for the website toggle ato pump lock button
+            elif(message == 'toggleATOPumpLock'):
+                self.ato.togglePumpLock()
+        else:
+            await self.updateClients('401')
+            
+
+
+
 
     
             

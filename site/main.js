@@ -1,17 +1,38 @@
 
 
 
-
 const socket = new WebSocket('ws://localhost:5000');
+var authed = false
+
+//starts with button disabled as no login could happen
+toggleButtons(false)
 
 //starts connectopm to websocket
 socket.addEventListener('open', function(event){
+    
     console.log('server connected');
 });
 
 //receives data from server
 //parses json and sends to setData Method
 socket.addEventListener('message', function(event) {
+    console.log(event.data);
+    //if user not authenticated buttons will be disabled
+    if(event.data == '401'){
+        toggleButtons(false);
+        authed = false;
+        return;
+    }
+
+    //if user is autedinticated buttons with be enabled
+    if(event.data == 'authed'){
+        console.log('authed')
+        toggleButtons(true);
+        authed = true;
+        
+        return
+    }
+
     console.log(JSON.parse(event.data));
     setData(JSON.parse(event.data));
 });
@@ -20,7 +41,7 @@ socket.addEventListener('message', function(event) {
 //updates page with new data
 //updates all data at once
 const setData = (data) => {
-
+        
     //get all html elements
     const displayFloatSensor  = document.getElementById('displayFloatSensor');
     const sumpFloatSensor = document.getElementById('sumpFloatSensor');
@@ -61,7 +82,13 @@ const setData = (data) => {
         atoPumpLock.textContent = (data.atoController.pump.locked==1);
        // atoPumpLockSwitch.checked  =  (data.atoController.pump.locked==1);
     }
-    toggleButtons(true)
+
+    if(authed){
+        toggleButtons(true)
+    }else{
+        toggleButtons(false)
+    }
+    
 }
 
 //used by the toggle button for main pump system
@@ -101,6 +128,7 @@ function toggleATOPumpLock(){
 
 //used to disable or enable all class toggle buttons
 function toggleButtons(tog){
+    console.log('toggle  '+ tog)
     buttons = document.getElementsByClassName('toggle');
 
     for(var x =0;x <buttons.length; x++){
@@ -113,7 +141,7 @@ function disablePumpButtons(){
     buttons = document.getElementsByClassName('pumpButton');
 
     for(var x =0;x <buttons.length; x++){
-        buttons[x].disabled = !tog;
+        buttons[x].disabled = true;
     }
 }
 
@@ -122,8 +150,12 @@ function disableAtoButtons(){
     buttons = document.getElementsByClassName('atoButton');
 
     for(var x =0;x <buttons.length; x++){
-        buttons[x].disabled = !tog;
+        buttons[x].disabled = true;
     }
 }
 
+//used to send auth info
+function sendAuth(){
+    socket.send('auth:'+document.getElementById('username').value+','+document.getElementById('password').value)
+}
 
